@@ -1,6 +1,7 @@
 # Don't track content of these folders
 PS_PL_COM/PS_PL_COM.cache/
 PS_PL_COM/PS_PL_COM.runs/
+PS_PL_COM/.vscode/
 
 # Compiled source #
 ###################

@@ -24,7 +24,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='D:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.runs/impl_1'
+HD_PWD='D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.runs/impl_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log

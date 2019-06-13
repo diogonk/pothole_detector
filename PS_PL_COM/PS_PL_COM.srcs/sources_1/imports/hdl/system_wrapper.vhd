@@ -28,7 +28,7 @@ entity system_wrapper is
     DDR_ras_n : inout STD_LOGIC;
     DDR_reset_n : inout STD_LOGIC;
     DDR_we_n : inout STD_LOGIC;
-    FCLK_CLK0 : out STD_LOGIC;
+    --FCLK_CLK0 : out STD_LOGIC;
     FIXED_IO_ddr_vrn : inout STD_LOGIC;
     FIXED_IO_ddr_vrp : inout STD_LOGIC;
     FIXED_IO_mio : inout STD_LOGIC_VECTOR ( 53 downto 0 );
@@ -36,15 +36,20 @@ entity system_wrapper is
     FIXED_IO_ps_porb : inout STD_LOGIC;
     FIXED_IO_ps_srstb : inout STD_LOGIC;
     --GPIO_32_tri_i : in STD_LOGIC_VECTOR ( 31 downto 0 )
-    SW_Inputs: in STD_LOGIC_VECTOR(7 downto 0)
+    SW_Inputs: in STD_LOGIC_VECTOR(7 downto 0);
+    clk : in std_logic;
+    sda : inout std_logic;
+    scl : inout std_logic;
+    status : out std_logic_vector(3 downto 0)
   );
 end system_wrapper;
 
 architecture STRUCTURE of system_wrapper is
   signal axi_s: STD_LOGIC_VECTOR(31 downto 0);
+  signal Accel_X_s : STD_LOGIC_VECTOR(15 downto 0);
   component system is
   port (
-    FCLK_CLK0 : out STD_LOGIC;
+    --FCLK_CLK0 : out STD_LOGIC;
     DDR_cas_n : inout STD_LOGIC;
     DDR_cke : inout STD_LOGIC;
     DDR_ck_n : inout STD_LOGIC;
@@ -69,6 +74,15 @@ architecture STRUCTURE of system_wrapper is
     GPIO_32_tri_i : in STD_LOGIC_VECTOR ( 31 downto 0 )
   );
   end component system;
+  component mpu6050 is
+    port (
+    clk : in std_logic;
+    sda : inout std_logic;
+    scl : inout std_logic;
+    Accel_X : out std_logic_vector(15 downto 0);
+    status: out std_logic_vector(3 downto 0)
+  );
+  end component mpu6050;
 begin
 system_i: component system
      port map (
@@ -87,7 +101,7 @@ system_i: component system
       DDR_ras_n => DDR_ras_n,
       DDR_reset_n => DDR_reset_n,
       DDR_we_n => DDR_we_n,
-      FCLK_CLK0 => FCLK_CLK0,
+      --FCLK_CLK0 => FCLK_CLK0,
       FIXED_IO_ddr_vrn => FIXED_IO_ddr_vrn,
       FIXED_IO_ddr_vrp => FIXED_IO_ddr_vrp,
       FIXED_IO_mio(53 downto 0) => FIXED_IO_mio(53 downto 0),
@@ -96,7 +110,15 @@ system_i: component system
       FIXED_IO_ps_srstb => FIXED_IO_ps_srstb,
       GPIO_32_tri_i(31 downto 0) => axi_s(31 downto 0)
     );
-    
+  mpu6050_i : component mpu6050
+  port map(
+    clk => clk,
+    sda => sda,
+    scl => scl,
+    Accel_X => Accel_X_s,
+    status => status
+  );
+   
      axi_s(3 downto 0) <= "1111" when SW_Inputs(0) = '1' else
      "0000";
      axi_s(7 downto 4) <= "1111" when SW_Inputs(1) = '1' else
@@ -105,12 +127,13 @@ system_i: component system
      "0000";
      axi_s(15 downto 12) <= "1111" when SW_Inputs(3) = '1' else
      "0000";
-     axi_s(19 downto 16) <= "1111" when SW_Inputs(4) = '1' else
-     "0000";
-     axi_s(23 downto 20) <= "1111" when SW_Inputs(5) = '1' else
-     "0000";
-     axi_s(27 downto 24) <= "1111" when SW_Inputs(6) = '1' else
-     "0000";
-     axi_s(31 downto 28) <= "1111" when SW_Inputs(7) = '1' else
-     "0000";
+     axi_s(31 downto 16) <= Accel_X_s;
+     --axi_s(19 downto 16) <= "1111" when SW_Inputs(4) = '1' else
+     --"0000";
+     --axi_s(23 downto 20) <= "1111" when SW_Inputs(5) = '1' else
+     --"0000";
+     --axi_s(27 downto 24) <= "1111" when SW_Inputs(6) = '1' else
+     --"0000";
+     --axi_s(31 downto 28) <= "1111" when SW_Inputs(7) = '1' else
+     --"0000";
 end STRUCTURE;

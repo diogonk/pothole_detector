@@ -17,31 +17,36 @@ proc create_report { reportName command } {
     send_msg_id runtcl-5 warning "$msg"
   }
 }
+set_msg_config -id {Common 17-41} -limit 10000000
 create_project -in_memory -part xc7z020clg484-1
 
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
 set_msg_config -source 4 -id {IP_Flow 19-2162} -severity warning -new_severity info
-set_property webtalk.parent_dir D:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.cache/wt [current_project]
-set_property parent.project_path D:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.xpr [current_project]
+set_property webtalk.parent_dir D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.cache/wt [current_project]
+set_property parent.project_path D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.xpr [current_project]
 set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY} [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language VHDL [current_project]
 set_property board_part em.avnet.com:zed:part0:0.9 [current_project]
-set_property ip_output_repo d:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.cache/ip [current_project]
+set_property ip_output_repo d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
-read_vhdl -library xil_defaultlib D:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.srcs/sources_1/imports/hdl/system_wrapper.vhd
-add_files D:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/system.bd
-set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_processing_system7_0_0/system_processing_system7_0_0.xdc]
-set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0_board.xdc]
-set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0.xdc]
-set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_rst_ps7_0_100M_0/system_rst_ps7_0_100M_0_board.xdc]
-set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_rst_ps7_0_100M_0/system_rst_ps7_0_100M_0.xdc]
-set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_rst_ps7_0_100M_0/system_rst_ps7_0_100M_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_auto_pc_0/system_auto_pc_0_ooc.xdc]
-set_property used_in_implementation false [get_files -all D:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/system_ooc.xdc]
+read_vhdl -library xil_defaultlib {
+  D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/imports/TCC/i2c_master.vhd
+  D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/new/mpu6050.vhd
+  D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/imports/hdl/system_wrapper.vhd
+}
+add_files D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/system.bd
+set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_processing_system7_0_0/system_processing_system7_0_0.xdc]
+set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0_board.xdc]
+set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_axi_gpio_0_0/system_axi_gpio_0_0.xdc]
+set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_rst_ps7_0_100M_0/system_rst_ps7_0_100M_0_board.xdc]
+set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_rst_ps7_0_100M_0/system_rst_ps7_0_100M_0.xdc]
+set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_rst_ps7_0_100M_0/system_rst_ps7_0_100M_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_auto_pc_0/system_auto_pc_0_ooc.xdc]
+set_property used_in_implementation false [get_files -all D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/system_ooc.xdc]
 
 # Mark all dcp files as not used in implementation to prevent them from being
 # stitched into the results of this synthesis run. Any black boxes in the
@@ -51,8 +56,8 @@ set_property used_in_implementation false [get_files -all D:/UTFPR/TCC/PS_PL_COM
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
-read_xdc D:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.srcs/constrs_1/new/PS_PL.xdc
-set_property used_in_implementation false [get_files D:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.srcs/constrs_1/new/PS_PL.xdc]
+read_xdc D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/constrs_1/new/PS_PL.xdc
+set_property used_in_implementation false [get_files D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/constrs_1/new/PS_PL.xdc]
 
 read_xdc dont_touch.xdc
 set_property used_in_implementation false [get_files dont_touch.xdc]

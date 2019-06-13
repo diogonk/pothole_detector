@@ -60,16 +60,17 @@ proc step_failed { step } {
   close $ch
 }
 
+set_msg_config -id {Common 17-41} -limit 10000000
 
 start_step init_design
 set ACTIVE_STEP init_design
 set rc [catch {
   create_msg_db init_design.pb
   reset_param project.defaultXPMLibraries 
-  open_checkpoint D:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.runs/impl_1/system_wrapper.dcp
-  set_property webtalk.parent_dir D:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.cache/wt [current_project]
-  set_property parent.project_path D:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.xpr [current_project]
-  set_property ip_output_repo D:/UTFPR/TCC/PS_PL_COM/PS_PL_COM.cache/ip [current_project]
+  open_checkpoint D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.runs/impl_1/system_wrapper.dcp
+  set_property webtalk.parent_dir D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.cache/wt [current_project]
+  set_property parent.project_path D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.xpr [current_project]
+  set_property ip_output_repo D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
   set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY} [current_project]
   close_msg_db -file init_design.pb
