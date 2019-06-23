@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7z020clg484-1" LaunchTime="1560299250">
+<GenRun Id="synth_1" LaunchPart="xc7z020clg484-1" LaunchTime="1561329233">
   <File Type="PA-TCL" Name="system_wrapper.tcl"/>
   <File Type="RDS-PROPCONSTRS" Name="system_wrapper_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="system_wrapper_reports.tcl"/>
@@ -18,15 +18,25 @@
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
     </File>
-    <File Path="$PSRCDIR/sources_1/imports/TCC/i2c_master.vhd">
+    <File Path="$PPRDIR/../MPU_VHDL_SRC/compare.vhd">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../../i2c_master.vhd"/>
-        <Attr Name="ImportTime" Val="1559257503"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
     </File>
-    <File Path="$PSRCDIR/sources_1/new/mpu6050.vhd">
+    <File Path="$PPRDIR/../MPU_VHDL_SRC/demo_mpu6050.vhd">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../MPU_VHDL_SRC/i2cmaster.vhd">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../MPU_VHDL_SRC/mpu6050.vhd">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -35,7 +45,7 @@
     <File Path="$PSRCDIR/sources_1/imports/hdl/system_wrapper.vhd">
       <FileInfo>
         <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/bd/system/hdl/system_wrapper.vhd"/>
-        <Attr Name="ImportTime" Val="1560010748"/>
+        <Attr Name="ImportTime" Val="1561329178"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
@@ -69,7 +79,8 @@
     <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2018"/>
     <Step Id="synth_design"/>
   </Strategy>
-  <BlockFileSet Type="BlockSrcs" Name="system_axi_gpio_0_0"/>
   <BlockFileSet Type="BlockSrcs" Name="system_processing_system7_0_0"/>
   <BlockFileSet Type="BlockSrcs" Name="system_rst_ps7_0_100M_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_xbar_0"/>
+  <BlockFileSet Type="BlockSrcs" Name="system_mpu_data_0_1"/>
 </GenRun>

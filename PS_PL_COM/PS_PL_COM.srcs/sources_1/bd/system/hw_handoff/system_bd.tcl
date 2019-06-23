@@ -158,20 +158,18 @@ proc create_root_design { parentCell } {
   # Create interface ports
   set DDR [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 DDR ]
   set FIXED_IO [ create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 FIXED_IO ]
-  set GPIO_32 [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 GPIO_32 ]
 
   # Create ports
   set FCLK_CLK0 [ create_bd_port -dir O -type clk FCLK_CLK0 ]
+  set s00_axi_data_in_0 [ create_bd_port -dir I -from 31 -to 0 s00_axi_data_in_0 ]
+  set s01_axi_data_in_0 [ create_bd_port -dir I -from 31 -to 0 s01_axi_data_in_0 ]
+  set s02_axi_data_in_0 [ create_bd_port -dir I -from 31 -to 0 s02_axi_data_in_0 ]
+  set s03_axi_data_in_0 [ create_bd_port -dir I -from 31 -to 0 s03_axi_data_in_0 ]
+  set s04_axi_data_in_0 [ create_bd_port -dir I -from 31 -to 0 s04_axi_data_in_0 ]
+  set s05_axi_data_in_0 [ create_bd_port -dir I -from 31 -to 0 s05_axi_data_in_0 ]
 
-  # Create instance: axi_gpio_0, and set properties
-  set axi_gpio_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_0 ]
-  set_property -dict [ list \
-   CONFIG.C_ALL_INPUTS {1} \
-   CONFIG.C_ALL_OUTPUTS {0} \
-   CONFIG.C_GPIO_WIDTH {32} \
-   CONFIG.GPIO_BOARD_INTERFACE {Custom} \
-   CONFIG.USE_BOARD_FLOW {true} \
- ] $axi_gpio_0
+  # Create instance: mpu_data_0, and set properties
+  set mpu_data_0 [ create_bd_cell -type ip -vlnv xilinx.com:user:mpu_data:1.0 mpu_data_0 ]
 
   # Create instance: processing_system7_0, and set properties
   set processing_system7_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 processing_system7_0 ]
@@ -574,26 +572,41 @@ proc create_root_design { parentCell } {
   # Create instance: ps7_0_axi_periph, and set properties
   set ps7_0_axi_periph [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 ps7_0_axi_periph ]
   set_property -dict [ list \
-   CONFIG.NUM_MI {1} \
+   CONFIG.NUM_MI {6} \
  ] $ps7_0_axi_periph
 
   # Create instance: rst_ps7_0_100M, and set properties
   set rst_ps7_0_100M [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_ps7_0_100M ]
 
   # Create interface connections
-  connect_bd_intf_net -intf_net axi_gpio_0_GPIO [get_bd_intf_ports GPIO_32] [get_bd_intf_pins axi_gpio_0/GPIO]
   connect_bd_intf_net -intf_net processing_system7_0_DDR [get_bd_intf_ports DDR] [get_bd_intf_pins processing_system7_0/DDR]
   connect_bd_intf_net -intf_net processing_system7_0_FIXED_IO [get_bd_intf_ports FIXED_IO] [get_bd_intf_pins processing_system7_0/FIXED_IO]
   connect_bd_intf_net -intf_net processing_system7_0_M_AXI_GP0 [get_bd_intf_pins processing_system7_0/M_AXI_GP0] [get_bd_intf_pins ps7_0_axi_periph/S00_AXI]
-  connect_bd_intf_net -intf_net ps7_0_axi_periph_M00_AXI [get_bd_intf_pins axi_gpio_0/S_AXI] [get_bd_intf_pins ps7_0_axi_periph/M00_AXI]
+  connect_bd_intf_net -intf_net ps7_0_axi_periph_M00_AXI [get_bd_intf_pins mpu_data_0/S00_AXI] [get_bd_intf_pins ps7_0_axi_periph/M00_AXI]
+  connect_bd_intf_net -intf_net ps7_0_axi_periph_M01_AXI [get_bd_intf_pins mpu_data_0/S01_AXI] [get_bd_intf_pins ps7_0_axi_periph/M01_AXI]
+  connect_bd_intf_net -intf_net ps7_0_axi_periph_M02_AXI [get_bd_intf_pins mpu_data_0/S02_AXI] [get_bd_intf_pins ps7_0_axi_periph/M02_AXI]
+  connect_bd_intf_net -intf_net ps7_0_axi_periph_M03_AXI [get_bd_intf_pins mpu_data_0/S03_AXI] [get_bd_intf_pins ps7_0_axi_periph/M03_AXI]
+  connect_bd_intf_net -intf_net ps7_0_axi_periph_M04_AXI [get_bd_intf_pins mpu_data_0/S04_AXI] [get_bd_intf_pins ps7_0_axi_periph/M04_AXI]
+  connect_bd_intf_net -intf_net ps7_0_axi_periph_M05_AXI [get_bd_intf_pins mpu_data_0/S05_AXI] [get_bd_intf_pins ps7_0_axi_periph/M05_AXI]
 
   # Create port connections
-  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_ports FCLK_CLK0] [get_bd_pins axi_gpio_0/s_axi_aclk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins ps7_0_axi_periph/ACLK] [get_bd_pins ps7_0_axi_periph/M00_ACLK] [get_bd_pins ps7_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps7_0_100M/slowest_sync_clk]
+  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_ports FCLK_CLK0] [get_bd_pins mpu_data_0/s00_axi_aclk] [get_bd_pins mpu_data_0/s01_axi_aclk] [get_bd_pins mpu_data_0/s02_axi_aclk] [get_bd_pins mpu_data_0/s03_axi_aclk] [get_bd_pins mpu_data_0/s04_axi_aclk] [get_bd_pins mpu_data_0/s05_axi_aclk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins ps7_0_axi_periph/ACLK] [get_bd_pins ps7_0_axi_periph/M00_ACLK] [get_bd_pins ps7_0_axi_periph/M01_ACLK] [get_bd_pins ps7_0_axi_periph/M02_ACLK] [get_bd_pins ps7_0_axi_periph/M03_ACLK] [get_bd_pins ps7_0_axi_periph/M04_ACLK] [get_bd_pins ps7_0_axi_periph/M05_ACLK] [get_bd_pins ps7_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps7_0_100M/slowest_sync_clk]
   connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_pins processing_system7_0/FCLK_RESET0_N] [get_bd_pins rst_ps7_0_100M/ext_reset_in]
-  connect_bd_net -net rst_ps7_0_100M_peripheral_aresetn [get_bd_pins axi_gpio_0/s_axi_aresetn] [get_bd_pins ps7_0_axi_periph/ARESETN] [get_bd_pins ps7_0_axi_periph/M00_ARESETN] [get_bd_pins ps7_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps7_0_100M/peripheral_aresetn]
+  connect_bd_net -net rst_ps7_0_100M_peripheral_aresetn [get_bd_pins mpu_data_0/s00_axi_aresetn] [get_bd_pins mpu_data_0/s01_axi_aresetn] [get_bd_pins mpu_data_0/s02_axi_aresetn] [get_bd_pins mpu_data_0/s03_axi_aresetn] [get_bd_pins mpu_data_0/s04_axi_aresetn] [get_bd_pins mpu_data_0/s05_axi_aresetn] [get_bd_pins ps7_0_axi_periph/ARESETN] [get_bd_pins ps7_0_axi_periph/M00_ARESETN] [get_bd_pins ps7_0_axi_periph/M01_ARESETN] [get_bd_pins ps7_0_axi_periph/M02_ARESETN] [get_bd_pins ps7_0_axi_periph/M03_ARESETN] [get_bd_pins ps7_0_axi_periph/M04_ARESETN] [get_bd_pins ps7_0_axi_periph/M05_ARESETN] [get_bd_pins ps7_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps7_0_100M/peripheral_aresetn]
+  connect_bd_net -net s00_axi_data_in_0_1 [get_bd_ports s00_axi_data_in_0] [get_bd_pins mpu_data_0/s00_axi_data_in]
+  connect_bd_net -net s01_axi_data_in_0_1 [get_bd_ports s01_axi_data_in_0] [get_bd_pins mpu_data_0/s01_axi_data_in]
+  connect_bd_net -net s02_axi_data_in_0_1 [get_bd_ports s02_axi_data_in_0] [get_bd_pins mpu_data_0/s02_axi_data_in]
+  connect_bd_net -net s03_axi_data_in_0_1 [get_bd_ports s03_axi_data_in_0] [get_bd_pins mpu_data_0/s03_axi_data_in]
+  connect_bd_net -net s04_axi_data_in_0_1 [get_bd_ports s04_axi_data_in_0] [get_bd_pins mpu_data_0/s04_axi_data_in]
+  connect_bd_net -net s05_axi_data_in_0_1 [get_bd_ports s05_axi_data_in_0] [get_bd_pins mpu_data_0/s05_axi_data_in]
 
   # Create address segments
-  create_bd_addr_seg -range 0x00010000 -offset 0x41200000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs axi_gpio_0/S_AXI/Reg] SEG_axi_gpio_0_Reg
+  create_bd_addr_seg -range 0x00010000 -offset 0x43C00000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs mpu_data_0/S00_AXI/S00_AXI_reg] SEG_mpu_data_0_S00_AXI_reg
+  create_bd_addr_seg -range 0x00010000 -offset 0x43C10000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs mpu_data_0/S01_AXI/S01_AXI_reg] SEG_mpu_data_0_S01_AXI_reg
+  create_bd_addr_seg -range 0x00010000 -offset 0x43C20000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs mpu_data_0/S02_AXI/S02_AXI_reg] SEG_mpu_data_0_S02_AXI_reg
+  create_bd_addr_seg -range 0x00010000 -offset 0x43C30000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs mpu_data_0/S03_AXI/S03_AXI_reg] SEG_mpu_data_0_S03_AXI_reg
+  create_bd_addr_seg -range 0x00010000 -offset 0x43C40000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs mpu_data_0/S04_AXI/S04_AXI_reg] SEG_mpu_data_0_S04_AXI_reg
+  create_bd_addr_seg -range 0x00010000 -offset 0x43C50000 [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs mpu_data_0/S05_AXI/S05_AXI_reg] SEG_mpu_data_0_S05_AXI_reg
 
 
   # Restore current instance

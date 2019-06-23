@@ -48,7 +48,7 @@
 #include <stdio.h>
 #include "platform.h"
 #include "xparameters.h"
-#include "xgpio.h"
+//#include "xgpio.h"
 
 #define GPIO_CHANNEL 1
 #define BTN_INPUT 0x1F
@@ -60,8 +60,8 @@
 
 /************************** Function Prototypes ****************************/
 
-int GpioOutputExample(u16 DeviceId, u32 GpioWidth);
-int GpioInputExample(u16 DeviceId, u32 *DataRead);
+//int GpioOutputExample(u16 DeviceId, u32 GpioWidth);
+//int GpioInputExample(u16 DeviceId, u32 *DataRead);
 
 
 /************************** Variable Definitions **************************/
@@ -70,26 +70,26 @@ int GpioInputExample(u16 DeviceId, u32 *DataRead);
  * easily accessible from a debugger
  */
 
-XGpio GpioInput;  /* The driver instance for GPIO Device configured as I/P */
+//XGpio GpioInput;  /* The driver instance for GPIO Device configured as I/P */
 
 //The following constant maps to the name of the hardware instances that
 // were created in the Vivado system.
 
-#define GPIO_EXAMPLE_DEVICE_ID  XPAR_AXI_GPIO_0_DEVICE_ID
+//#define GPIO_EXAMPLE_DEVICE_ID  XPAR_AXI_GPIO_0_DEVICE_ID
 
 int main()
 {
     int Status;
-    u32 value           = 0;
+    //u32 value           = 0;
     int Delay;
 
-	print("Hello World\n\r");
-    Status = XGpio_Initialize(&GpioInput, GPIO_EXAMPLE_DEVICE_ID);
-    if (Status != XST_SUCCESS) {
-        return XST_FAILURE;
-    }
+	//print("Hello World\n\r");
+    //Status = XGpio_Initialize(&GpioInput, GPIO_EXAMPLE_DEVICE_ID);
+    //if (Status != XST_SUCCESS) {
+    //    return XST_FAILURE;
+    //}
 
-	print("Hello World1\n\r");
+	//print("Hello World1\n\r");
 	/* Loop forever blinking the LED */
 
 	while (1) {
@@ -97,11 +97,11 @@ int main()
 		 * Read the state of the data so that only the LED state can be
 		 * modified
 		 */
-		print("Hello World2 \n\r");
-		xil_printf("Addres is:  %X \n\r", GpioInput.BaseAddress);
-		value = XGpio_DiscreteRead(&GpioInput, GPIO_CHANNEL);
+		//print("Hello World2 \n\r");
+		//xil_printf("Addres is:  %X \n\r", GpioInput.BaseAddress);
+		//value = XGpio_DiscreteRead(&GpioInput, GPIO_CHANNEL);
 		print("Hello World3\n\r");
-		xil_printf("Data read from GPIO Input is  %d \n\r", (int)value);
+		//xil_printf("Data read from GPIO Input is  %d \n\r", (int)value);
 
 		for (Delay = 0; Delay < LED_DELAY; Delay++);
 	}
@@ -109,25 +109,27 @@ int main()
     return 0;
 }
 /******************************************************************************/
+/*
 int GpioInputExample(u16 DeviceId, u32 *DataRead)
 {
 	 int Status;
 
-	 /*
-	  * Initialize the GPIO driver so that it's ready to use,
-	  * specify the device ID that is generated in xparameters.h
-	  */
+
+	   //Initialize the GPIO driver so that it's ready to use,
+	   //specify the device ID that is generated in xparameters.h
+
 	 Status = XGpio_Initialize(&GpioInput, DeviceId);
 	 if (Status != XST_SUCCESS) {
 		  return XST_FAILURE;
 	 }
 
-	 /* Set the direction for all signals to be inputs */
+	 // Set the direction for all signals to be inputs
 	 XGpio_SetDataDirection(&GpioInput, GPIO_CHANNEL, 0xFFFFFFFF);
 
-	 /* Read the state of the data so that it can be  verified */
-	 *DataRead = XGpio_DiscreteRead(&GpioInput, GPIO_CHANNEL);
+	 // Read the state of the data so that it can be  verified
+	 //DataRead = XGpio_DiscreteRead(&GpioInput, GPIO_CHANNEL);
 
 	 return XST_SUCCESS;
 
 }
+*/
