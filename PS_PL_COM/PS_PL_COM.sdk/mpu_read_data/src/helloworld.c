@@ -58,7 +58,7 @@
 #define XPAR_MY_MULTIPLIER_0_S04_AXI_BASEADDR 0x43C40000
 #define XPAR_MY_MULTIPLIER_0_S05_AXI_BASEADDR 0x43C50000
 
-#define LED_DELAY 200000000
+#define LED_DELAY 40000000
 
 
 Xuint32 *baseaddr_p0 = (Xuint32 *)XPAR_MY_MULTIPLIER_0_S00_AXI_BASEADDR;
@@ -83,7 +83,7 @@ int main()
 		//print("Hello World2 \n\r");
 		//xil_printf("Addres is:  %X \n\r", GpioInput.BaseAddress);
 		//value = XGpio_DiscreteRead(&GpioInput, GPIO_CHANNEL);
-		print("Hello World3\n\r");
+		//print("Hello World3\n\r");
 		//xil_printf("Data read from GPIO Input is  %d \n\r", (int)value);
 
 
@@ -91,9 +91,9 @@ int main()
 		// Write multiplier inputs to register 0
 		//*(baseaddr_p+0) = 0x00020003;
 		//xil_printf("Wrote: 0x%08x \n\r", *(baseaddr_p+0));
-		xil_printf("READ _X : 0x%08x \n\r", *(baseaddr_p0+1));
-		xil_printf("READ _Y : 0x%08x \n\r", *(baseaddr_p0+1));
-		xil_printf("READ _Z : 0x%08x \n\r", *(baseaddr_p0+1));
+		//xil_printf("READ _X : 0x%08x \n\r", *(baseaddr_p0+1));
+		//xil_printf("READ _Y : 0x%08x \n\r", *(baseaddr_p0+1));
+		//xil_printf("READ _Z : 0x%08x \n\r", *(baseaddr_p0+1));
 		// Read multiplier output from register 1
 		xil_printf("ACC _X : 0x%08x \n\r", ((*(baseaddr_p0+1))<<16)>>16);
 		xil_printf("ACC _Y : 0x%08x \n\r", ((*(baseaddr_p1+1))<<16)>>16);
@@ -101,6 +101,7 @@ int main()
 		xil_printf("GYR _X : 0x%08x \n\r", (*(baseaddr_p0+1))>>16);
 		xil_printf("GYR _Y : 0x%08x \n\r", (*(baseaddr_p1+1))>>16);
 		xil_printf("GYR _Z : 0x%08x \n\r", (*(baseaddr_p2+1))>>16);
+		print("\n\r");
 		for (Delay = 0; Delay < LED_DELAY; Delay++);
 	}
 
