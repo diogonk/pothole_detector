@@ -2,6 +2,8 @@
 PS_PL_COM/PS_PL_COM.cache/
 PS_PL_COM/PS_PL_COM.runs/
 PS_PL_COM/.vscode/
+PS_PL_COM/PS_PL_COM.sdk/.metadata/
+PS_PL_COM/PS_PL_COM.tmp/
 
 # Compiled source #
 ###################
@@ -34,3 +36,8 @@ PS_PL_COM/.vscode/
 *.wdm
 *.xpr
 *.snap
+*.pdom
+*.prefs
+*.lpr
+*.log
+*.resources
