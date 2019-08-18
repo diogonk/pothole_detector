@@ -49,24 +49,25 @@ entity system_wrapper is
     LEDX		: out	std_logic;
     LEDY		: out	std_logic;
     LEDZ		: out	std_logic;
+    filter_clk  : out std_logic;
     LEDSIGN		: out	std_logic
   );
 end system_wrapper;
 
 architecture STRUCTURE of system_wrapper is
 
-	signal S_X_ACC	: std_logic_vector(15 downto 0);
-	signal S_Y_ACC	: std_logic_vector(15 downto 0);
-	signal S_Z_ACC	: std_logic_vector(15 downto 0);
-	signal S_X_GYR	: std_logic_vector(15 downto 0);
-	signal S_Y_GYR	: std_logic_vector(15 downto 0);
-	signal S_Z_GYR	: std_logic_vector(15 downto 0);
-	signal s00_axi_data_in_0 : std_logic_vector(31 downto 0);
-	signal s01_axi_data_in_0 : std_logic_vector(31 downto 0);
-	signal s02_axi_data_in_0 : std_logic_vector(31 downto 0);
-	signal s03_axi_data_in_0 : std_logic_vector(31 downto 0);
-	signal s04_axi_data_in_0 : std_logic_vector(31 downto 0);
-	signal s05_axi_data_in_0 : std_logic_vector(31 downto 0);
+    signal S_X_ACC	: std_logic_vector(7 downto 0);
+    signal S_Y_ACC	: std_logic_vector(7 downto 0);
+    signal S_Z_ACC	: std_logic_vector(7 downto 0);
+    signal S_X_GYR	: std_logic_vector(7 downto 0);
+    signal S_Y_GYR	: std_logic_vector(7 downto 0);
+    signal S_Z_GYR	: std_logic_vector(7 downto 0);
+    signal s00_axi_data_in_0 : std_logic_vector(31 downto 0);
+    signal s01_axi_data_in_0 : std_logic_vector(31 downto 0);
+    signal s02_axi_data_in_0 : std_logic_vector(31 downto 0);
+    signal s03_axi_data_in_0 : std_logic_vector(31 downto 0);
+    signal s04_axi_data_in_0 : std_logic_vector(31 downto 0);
+    signal s05_axi_data_in_0 : std_logic_vector(31 downto 0);
 
   component system is
   port (
@@ -102,22 +103,22 @@ architecture STRUCTURE of system_wrapper is
   end component system;
   
   component DEMO_MPU6050 is
-	port(
-		MCLK		: in	std_logic;
-		RESET		: in	std_logic;
-		SDA			: inout	std_logic;
-		SCL			: inout	std_logic;
-		LEDX		: out	std_logic;
-		LEDY		: out	std_logic;
-		LEDZ		: out	std_logic;
-		LEDSIGN		: out	std_logic;
-        X_ACC	    : out   std_logic_vector(15 downto 0);
-        Y_ACC	    : out   std_logic_vector(15 downto 0);
-        Z_ACC	    : out   std_logic_vector(15 downto 0);
-        X_GYR	    : out   std_logic_vector(15 downto 0);
-        Y_GYR	    : out   std_logic_vector(15 downto 0);
-        Z_GYR	    : out   std_logic_vector(15 downto 0)
-	);
+    port(
+        MCLK		: in	std_logic;
+        RESET		: in	std_logic;
+        SDA			: inout	std_logic;
+        SCL			: inout	std_logic;
+        LEDX		: out	std_logic;
+        LEDY		: out	std_logic;
+        LEDZ		: out	std_logic;
+        LEDSIGN		: out	std_logic;
+        X_ACC	    : out   std_logic_vector(7 downto 0);
+        Y_ACC	    : out   std_logic_vector(7 downto 0);
+        Z_ACC	    : out   std_logic_vector(7 downto 0);
+        X_GYR	    : out   std_logic_vector(7 downto 0);
+        Y_GYR	    : out   std_logic_vector(7 downto 0);
+        Z_GYR	    : out   std_logic_vector(7 downto 0)
+    );
 end component DEMO_MPU6050;
 
 begin
@@ -154,26 +155,28 @@ system_i: component system
     );
     
 MPU6050_1: component DEMO_MPU6050
-    port map(
-		MCLK		=> MCLK,
-		RESET		=> RESET,
-		SDA			=> SDA,
-		SCL			=> SCL,
-		LEDX		=> LEDX,
-		LEDY		=> LEDY,
-		LEDZ		=> LEDZ,
-		LEDSIGN		=> LEDSIGN,
-        X_ACC	    => S_X_ACC,
-        Y_ACC	    => S_Y_ACC,
-        Z_ACC	    => S_Z_ACC,
-        X_GYR	    => S_X_GYR,
-        Y_GYR	    => S_Y_GYR,
-        Z_GYR	    => S_Z_GYR
+  port map(
+    MCLK		=> MCLK,
+    RESET		=> RESET,
+    SDA			=> SDA,
+    SCL			=> SCL,
+    LEDX		=> LEDX,
+    LEDY		=> LEDY,
+    LEDZ		=> LEDZ,
+    LEDSIGN		=> LEDSIGN,
+    X_ACC	    => S_X_ACC,
+    Y_ACC	    => S_Y_ACC,
+    Z_ACC	    => S_Z_ACC,
+    X_GYR	    => S_X_GYR,
+    Y_GYR	    => S_Y_GYR,
+    Z_GYR	    => S_Z_GYR
     );
-    s00_axi_data_in_0 <= S_X_ACC & S_X_GYR;
-    s01_axi_data_in_0 <= S_Y_ACC & S_Y_GYR;
-    s02_axi_data_in_0 <= S_Z_ACC & S_Z_GYR;
-    s03_axi_data_in_0 <= S_X_ACC & S_X_GYR;
-    s04_axi_data_in_0 <= S_Y_ACC & S_Y_GYR;
-    s05_axi_data_in_0 <= S_Z_ACC & S_Z_GYR;
+  
+s00_axi_data_in_0 <= "00000000" & S_X_ACC & "00000000" & S_X_GYR;
+s01_axi_data_in_0 <= "00000000" & S_Y_ACC & "00000000" & S_Y_GYR;
+s02_axi_data_in_0 <= "00000000" & S_Z_ACC & "00000000" & S_Z_GYR;
+s03_axi_data_in_0 <= "00000000" & S_X_ACC & "00000000" & S_X_GYR;
+s04_axi_data_in_0 <= "00000000" & S_Y_ACC & "00000000" & S_Y_GYR;
+s05_axi_data_in_0 <= "00000000" & S_Z_ACC & "00000000" & S_Z_GYR;
+    
 end STRUCTURE;
