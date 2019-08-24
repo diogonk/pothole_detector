@@ -12,6 +12,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 entity DEMO_MPU6050 is
+    generic(data_width: integer := 16);
     port(
         MCLK		: in	std_logic;
         RESET		: in	std_logic;
@@ -21,12 +22,13 @@ entity DEMO_MPU6050 is
         LEDY		: out	std_logic;
         LEDZ		: out	std_logic;
         LEDSIGN		: out	std_logic;
-        X_ACC	    : out   std_logic_vector(7 downto 0);
-        Y_ACC	    : out   std_logic_vector(7 downto 0);
-        Z_ACC	    : out   std_logic_vector(7 downto 0);
-        X_GYR	    : out   std_logic_vector(7 downto 0);
-        Y_GYR	    : out   std_logic_vector(7 downto 0);
-        Z_GYR	    : out   std_logic_vector(7 downto 0)
+        X_ACC	    : out   std_logic_vector(data_width - 1 downto 0);
+        Y_ACC	    : out   std_logic_vector(data_width - 1 downto 0);
+        Z_ACC	    : out   std_logic_vector(data_width - 1 downto 0);
+        X_GYR	    : out   std_logic_vector(data_width - 1 downto 0);
+        Y_GYR	    : out   std_logic_vector(data_width - 1 downto 0);
+        Z_GYR	    : out   std_logic_vector(data_width - 1 downto 0);
+        NEW_READ    : out   std_logic
     );
 end DEMO_MPU6050;
 
@@ -100,8 +102,8 @@ architecture mixed of DEMO_MPU6050 is
         port ( 
             clk : in  STD_LOGIC;
             reset : in  STD_LOGIC;
-            filter_in : in  STD_LOGIC_VECTOR (7 downto 0);
-            filter_out : out  STD_LOGIC_VECTOR (7 downto 0)
+            filter_in : in  STD_LOGIC_VECTOR (data_width - 1 downto 0);
+            filter_out : out  STD_LOGIC_VECTOR (data_width - 1 downto 0)
          );
     end component;
 
@@ -109,8 +111,8 @@ architecture mixed of DEMO_MPU6050 is
         port ( 
             clk : in  STD_LOGIC;
             reset : in  STD_LOGIC;
-            filter_in : in  STD_LOGIC_VECTOR (7 downto 0);
-            filter_out : out  STD_LOGIC_VECTOR (7 downto 0)
+            filter_in : in  STD_LOGIC_VECTOR (data_width - 1 downto 0);
+            filter_out : out  STD_LOGIC_VECTOR (data_width - 1 downto 0)
          );
     end component;
 --
@@ -121,12 +123,12 @@ architecture mixed of DEMO_MPU6050 is
     --signal ZREG		: std_logic_vector(7 downto 0);
 
 
-    signal S_X_ACC	: std_logic_vector(7 downto 0);
-    signal S_Y_ACC	: std_logic_vector(7 downto 0);
-    signal S_Z_ACC	: std_logic_vector(7 downto 0);
-    signal S_X_GYR	: std_logic_vector(7 downto 0);
-    signal S_Y_GYR	: std_logic_vector(7 downto 0);
-    signal S_Z_GYR	: std_logic_vector(7 downto 0);
+    signal S_X_ACC	: std_logic_vector(data_width - 1 downto 0);
+    signal S_Y_ACC	: std_logic_vector(data_width - 1 downto 0);
+    signal S_Z_ACC	: std_logic_vector(data_width - 1 downto 0);
+    signal S_X_GYR	: std_logic_vector(data_width - 1 downto 0);
+    signal S_Y_GYR	: std_logic_vector(data_width - 1 downto 0);
+    signal S_Z_GYR	: std_logic_vector(data_width - 1 downto 0);
 --
 
 --
@@ -152,12 +154,12 @@ architecture mixed of DEMO_MPU6050 is
     signal SCL_OUT			: std_logic;
     signal SDA_IN			: std_logic;
     signal SDA_OUT			: std_logic;
-    signal S_X_ACC_f 		: std_logic_vector(7 downto 0);
-    signal S_Y_ACC_f 		: std_logic_vector(7 downto 0);
-    signal S_Z_ACC_f 		: std_logic_vector(7 downto 0);
-    signal S_X_GYR_f 		: std_logic_vector(7 downto 0);
-    signal S_Y_GYR_f 		: std_logic_vector(7 downto 0);
-    signal S_Z_GYR_f 		: std_logic_vector(7 downto 0);
+    signal S_X_ACC_f 		: std_logic_vector(data_width - 1 downto 0);
+    signal S_Y_ACC_f 		: std_logic_vector(data_width - 1 downto 0);
+    signal S_Z_ACC_f 		: std_logic_vector(data_width - 1 downto 0);
+    signal S_X_GYR_f 		: std_logic_vector(data_width - 1 downto 0);
+    signal S_Y_GYR_f 		: std_logic_vector(data_width - 1 downto 0);
+    signal S_Z_GYR_f 		: std_logic_vector(data_width - 1 downto 0);
     signal counter 			: std_logic_vector(8 downto 0);
     signal nRST 			: std_logic;
 
@@ -166,6 +168,7 @@ architecture mixed of DEMO_MPU6050 is
 begin
 
     nRST <= not(RESET);
+    NEW_READ <= COMPLETED;
 
 -- PORT MAP --
     I_MPU6050_0 : MPU6050
@@ -222,9 +225,9 @@ begin
             TIC			=> TIC,
             COMPLETED	=> COMPLETED,
             RESCAN		=> RESCAN,
-            XREG		=> S_X_ACC,--XREG,
-            YREG		=> S_Y_ACC,--YREG,
-            ZREG		=> S_Z_ACC,--ZREG,
+            XREG		=> S_X_ACC(15 downto 8),--XREG,
+            YREG		=> S_Y_ACC(15 downto 8),--YREG,
+            ZREG		=> S_Z_ACC(15 downto 8),--ZREG,
             LEDX		=> LEDX,
             LEDY		=> LEDY,
             LEDZ		=> LEDZ,
@@ -235,47 +238,47 @@ begin
         port map(
             clk => MCLK,
             reset => RESET,
-            filter_in => S_X_ACC(7 downto 0),
-            filter_out => S_X_ACC_f(7 downto 0)
+            filter_in => S_X_ACC(data_width - 1 downto 0),
+            filter_out => S_X_ACC_f(data_width - 1 downto 0)
         );
 
     filter_aY: component acc_filter
         port map(
             clk => MCLK,
             reset => RESET,
-            filter_in => S_Y_ACC(7 downto 0),
-            filter_out => S_Y_ACC_f(7 downto 0)
+            filter_in => S_Y_ACC(data_width - 1 downto 0),
+            filter_out => S_Y_ACC_f(data_width - 1 downto 0)
         );
 
     filter_aZ: component acc_filter
         port map(
             clk => MCLK,
             reset => RESET,
-            filter_in => S_Z_ACC(7 downto 0),
-            filter_out => S_Z_ACC_f(7 downto 0)
+            filter_in => S_Z_ACC(data_width - 1 downto 0),
+            filter_out => S_Z_ACC_f(data_width - 1 downto 0)
         );
     filter_gX: component gyr_filter
         port map(
             clk => MCLK,
             reset => RESET,
-            filter_in => S_X_GYR(7 downto 0),
-            filter_out => S_X_GYR_f(7 downto 0)
+            filter_in => S_X_GYR(data_width - 1 downto 0),
+            filter_out => S_X_GYR_f(data_width - 1 downto 0)
         );
 
     filter_gY: component gyr_filter
         port map(
             clk => MCLK,
             reset => RESET,
-            filter_in => S_Y_GYR(7 downto 0),
-            filter_out => S_Y_GYR_f(7 downto 0)
+            filter_in => S_Y_GYR(data_width - 1 downto 0),
+            filter_out => S_Y_GYR_f(data_width - 1 downto 0)
         );
 
     filter_gZ: component gyr_filter
         port map(
             clk => MCLK,
             reset => RESET,
-            filter_in => S_Z_GYR(7 downto 0),
-            filter_out => S_Z_GYR_f(7 downto 0)
+            filter_in => S_Z_GYR(data_width - 1 downto 0),
+            filter_out => S_Z_GYR_f(data_width - 1 downto 0)
         );
 --
     TIC <= counter(8) and counter(6) and counter(3) and counter(2) and counter(0); -- 2.56 + 0.64 uS (~300 khz ) for ~100 kbit
@@ -310,27 +313,27 @@ begin
         elsif (MCLK'event and MCLK = '1') then
             if (TIC = '1' and LOAD = '1') then
                 if (ADR = x"0") then
-                    --S_X_ACC(15 downto 8) <= DATA;
+                    S_X_ACC(data_width - 1 downto 8) <= DATA;
                 elsif (ADR = x"1") then
                     S_X_ACC(7 downto 0) <= DATA;
                 elsif (ADR = x"2") then
-                   -- S_Y_ACC(15 downto 8) <= DATA;
+                    S_Y_ACC(data_width - 1 downto 8) <= DATA;
                 elsif (ADR = x"3") then
                     S_Y_ACC(7 downto 0) <= DATA;
                 elsif (ADR = x"4") then
-                    --S_Z_ACC(15 downto 8) <= DATA;
+                    S_Z_ACC (data_width - 1 downto 8) <= DATA;
                 elsif (ADR = x"5") then
                     S_Z_ACC(7 downto 0) <= DATA;
                 elsif (ADR = x"8") then
-                    --S_X_GYR(15 downto 8) <= DATA;
+                    S_X_GYR (data_width - 1 downto 8) <= DATA;
                 elsif (ADR = x"9") then
                     S_X_GYR(7 downto 0) <= DATA;
                 elsif (ADR = x"A") then
-                    --S_Y_GYR(15 downto 8) <= DATA;
+                    S_Y_GYR (data_width - 1 downto 8) <= DATA;
                 elsif (ADR = x"B") then
                     S_Y_GYR(7 downto 0) <= DATA;
                 elsif (ADR = x"C") then
-                    --S_Z_GYR(15 downto 8) <= DATA;
+                    S_Z_GYR (data_width - 1 downto 8) <= DATA;
                 elsif (ADR = x"D") then
                     S_Z_GYR(7 downto 0) <= DATA;
                 end if;
@@ -344,11 +347,11 @@ begin
     SDA <= 'Z' when SDA_OUT='1' else '0';
     SDA_IN <= to_UX01(SDA);
     --DATA UPDATE
-    X_ACC <= S_X_ACC_f(7 downto 0);
-    Y_ACC <= S_Y_ACC_f(7 downto 0);
-    Z_ACC <= S_Z_ACC_f(7 downto 0);
-    X_GYR <= S_X_GYR_f(7 downto 0);
-    Y_GYR <= S_Y_GYR_f(7 downto 0);
-    Z_GYR <= S_Z_GYR_f(7 downto 0);
+    X_ACC <= S_X_ACC_f(data_width -1 downto 0);
+    Y_ACC <= S_Y_ACC_f(data_width -1 downto 0);
+    Z_ACC <= S_Z_ACC_f(data_width -1 downto 0);
+    X_GYR <= S_X_GYR_f(data_width -1 downto 0);
+    Y_GYR <= S_Y_GYR_f(data_width -1 downto 0);
+    Z_GYR <= S_Z_GYR_f(data_width -1 downto 0);
 end mixed;
 

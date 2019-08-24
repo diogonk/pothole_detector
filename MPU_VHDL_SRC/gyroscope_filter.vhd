@@ -33,8 +33,8 @@ entity gyr_filter is
         Port ( 
                 clk         : in  STD_LOGIC;
                 reset       : in  STD_LOGIC;
-                filter_in   : in  STD_LOGIC_VECTOR (7 downto 0);
-                filter_out  : out STD_LOGIC_VECTOR (7 downto 0)
+                filter_in   : in  STD_LOGIC_VECTOR (15 downto 0);
+                filter_out  : out STD_LOGIC_VECTOR (15 downto 0)
                 );
 end gyr_filter;
 
@@ -54,24 +54,24 @@ architecture arch of gyr_filter is
     --------------------------------------------------------------------------	
 
     -- define biquad coefficients
-    constant	Coef_b0	:	std_logic_vector(31 downto 0) := B"00001001010111110110000000000000";				-- b0		~ +0.0055
-    constant	Coef_b1	:	std_logic_vector(31 downto 0) := B"00010010101111101100000000000000";				-- b1		~ +0.0111
-    constant	Coef_b2	:	std_logic_vector(31 downto 0) := B"00001001010111110110000000000000";				-- b2		~ +0.0055	
+    constant	Coef_b0	:	std_logic_vector(31 downto 0) := B"00_000110001111111001000000000000";				-- b0		~ +0.0055
+    constant	Coef_b1	:	std_logic_vector(31 downto 0) := B"00_001100011111110010000000000000";				-- b1		~ +0.0111
+    constant	Coef_b2	:	std_logic_vector(31 downto 0) := B"00_000110001111111001000000000000";				-- b2		~ +0.0055	
 
-    constant	Coef_a1	:	std_logic_vector(31 downto 0) := B"00000000000000000000000000000000";				-- a1		~ -1.7786 	
-    constant	Coef_a2	:	std_logic_vector(31 downto 0) := B"00000101011111011000000000000000";				-- a2		~ +0.8008
+    constant	Coef_a1	:	std_logic_vector(31 downto 0) := B"11_000011101010010000000000000000";				-- a1		~ -1.7786 	
+    constant	Coef_a2	:	std_logic_vector(31 downto 0) := B"00_010101010101010000000000000000";				-- a2		~ +0.8008
 
     -- define each pre gain sample flip flop
-    signal ZFF_X0, ZFF_X1, ZFF_X2, ZFF_Y1, ZFF_Y2 : std_logic_vector(7 downto 0) := (others => '0');
+    signal ZFF_X0, ZFF_X1, ZFF_X2, ZFF_Y1, ZFF_Y2 : std_logic_vector(15 downto 0) := (others => '0');
 
     -- define each post gain 64 bit sample
-    signal pgZFF_X0_quad, pgZFF_X1_quad, pgZFF_X2_quad, pgZFF_Y1_quad, pgZFF_Y2_quad  : std_logic_vector( 39 downto 0) := (others => '0');
+    signal pgZFF_X0_quad, pgZFF_X1_quad, pgZFF_X2_quad, pgZFF_Y1_quad, pgZFF_Y2_quad  : std_logic_vector(47 downto 0) := (others => '0');
 
     -- define each post gain 32 but truncated sample
-    signal pgZFF_X0, pgZFF_X1, pgZFF_X2, pgZFF_Y1, pgZFF_Y2 : std_logic_vector(7 downto 0) := (others => '0');
+    signal pgZFF_X0, pgZFF_X1, pgZFF_X2, pgZFF_Y1, pgZFF_Y2 : std_logic_vector(15 downto 0) := (others => '0');
 
     -- define output double reg
-    signal Y_out_double : std_logic_vector( 7 downto 0) := (others => '0');
+    signal Y_out_double : std_logic_vector(15 downto 0) := (others => '0');
     
     -- state machine signals
     type state_type is (idle, run);
@@ -91,7 +91,7 @@ architecture arch of gyr_filter is
     begin
   
     n_reset <= 	not(reset); -- not reset
-    clk_enable <= '1' when counter = x"1E848" else '0'; -- Fs = 400Hz
+    clk_enable <= '1' when counter = x"3D090" else '0'; -- Fs = 400Hz
 
     GEN: process(clk, n_reset)
     begin
@@ -218,11 +218,11 @@ architecture arch of gyr_filter is
     begin
         if rising_edge(clk) then
             if (trunc_prods = '1') then	
-                pgZFF_X0 <= pgZFF_X0_quad(37 downto 30);	
-                pgZFF_X2 <= pgZFF_X2_quad(37 downto 30);
-                pgZFF_X1 <= pgZFF_X1_quad(37 downto 30);
-                pgZFF_Y1 <= pgZFF_Y1_quad(37 downto 30);
-                pgZFF_Y2 <= pgZFF_Y2_quad(37 downto 30);
+                pgZFF_X0 <= pgZFF_X0_quad(45 downto 30);	
+                pgZFF_X2 <= pgZFF_X2_quad(45 downto 30);
+                pgZFF_X1 <= pgZFF_X1_quad(45 downto 30);
+                pgZFF_Y1 <= pgZFF_Y1_quad(45 downto 30);
+                pgZFF_Y2 <= pgZFF_Y2_quad(45 downto 30);
             end if;
         end if;
     end process;

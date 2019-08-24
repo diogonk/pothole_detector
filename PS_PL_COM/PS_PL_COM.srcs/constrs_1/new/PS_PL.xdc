@@ -1,22 +1,6 @@
 set_property PACKAGE_PIN V8 [get_ports FCLK_CLK0]
 set_property IOSTANDARD LVCMOS33 [get_ports FCLK_CLK0]
 
-set_property PACKAGE_PIN Y9 [get_ports clk]
-set_property IOSTANDARD LVCMOS33 [get_ports clk]
-set_property PACKAGE_PIN W12 [get_ports scl]
-set_property PACKAGE_PIN W11 [get_ports sda]
-set_property IOSTANDARD LVCMOS33 [get_ports sda]
-set_property IOSTANDARD LVCMOS33 [get_ports scl]
-
-set_property PACKAGE_PIN T22 [get_ports {status[3]}]
-set_property PACKAGE_PIN T21 [get_ports {status[2]}]
-set_property PACKAGE_PIN U22 [get_ports {status[1]}]
-set_property PACKAGE_PIN U21 [get_ports {status[0]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {status[3]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {status[2]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {status[1]}]
-set_property IOSTANDARD LVCMOS33 [get_ports {status[0]}]
-
 set_property PACKAGE_PIN Y9 [get_ports MCLK]
 set_property PACKAGE_PIN P16 [get_ports RESET]
 set_property PACKAGE_PIN U14 [get_ports LEDSIGN]
