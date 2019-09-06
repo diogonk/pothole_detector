@@ -30,6 +30,14 @@ use IEEE.NUMERIC_STD.ALL;
 
 
 entity acc_filter is
+    generic(
+        Coef_b0	:	std_logic_vector(31 downto 0);
+        Coef_b1	:	std_logic_vector(31 downto 0);
+        Coef_b2	:	std_logic_vector(31 downto 0);
+        Coef_a1	:	std_logic_vector(31 downto 0);
+        Coef_a2	:	std_logic_vector(31 downto 0);
+        CLOCK_COUNTER : std_logic_vector(19 downto 0)
+    ); --x"3D090"
     port( 
         clk         : in  STD_LOGIC;
         reset       : in  STD_LOGIC;
@@ -51,12 +59,11 @@ architecture arch of acc_filter is
     --------------------------------------------------------------------------	
 
     -- define biquad coefficients
-    constant	Coef_b0	:	std_logic_vector(31 downto 0) := B"00_000000001110110101011001101110";				-- b0		~ +0.0036
-    constant	Coef_b1	:	std_logic_vector(31 downto 0) := B"00_000000011101101010110011011101";				-- b1		~ +0.0072
-    constant	Coef_b2	:	std_logic_vector(31 downto 0) := B"00_000000001110110101011001101110";				-- b2		~ +0.0036	
-
-    constant	Coef_a1	:	std_logic_vector(31 downto 0) := B"10_001011010110001111011101100001";				-- a1		~ -1.8227 	
-    constant	Coef_a2	:	std_logic_vector(31 downto 0) := B"00_110101100101000110001001011000";				-- a2		~ +0.8372
+    --constant	Coef_b0	:	std_logic_vector(31 downto 0) := B"00_000000001110110101011001101110";				-- b0		~ +0.0036
+    --constant	Coef_b1	:	std_logic_vector(31 downto 0) := B"00_000000011101101010110011011101";				-- b1		~ +0.0072
+    --constant	Coef_b2	:	std_logic_vector(31 downto 0) := B"00_000000001110110101011001101110";				-- b2		~ +0.0036
+    --constant	Coef_a1	:	std_logic_vector(31 downto 0) := B"10_001011010110001111011101100001";				-- a1		~ -1.8227
+    --constant	Coef_a2	:	std_logic_vector(31 downto 0) := B"00_110101100101000110001001011000";				-- a2		~ +0.8372
 
     -- define each pre gain sample flip flop
     signal ZFF_X0, ZFF_X1, ZFF_X2, ZFF_Y1, ZFF_Y2 : std_logic_vector(15 downto 0) := (others => '0');
@@ -88,7 +95,7 @@ architecture arch of acc_filter is
     begin
   
     n_reset <= 	not(reset); -- not reset
-    clk_enable <= '1' when counter = x"3D090" else '0'; -- Fs = 400Hz
+    clk_enable <= '1' when counter = CLOCK_COUNTER else '0'; -- Fs = 400Hz
 
     GEN: process(clk, n_reset)
     begin
