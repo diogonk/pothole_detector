@@ -46,11 +46,12 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "platform.h"
 #include "xbasic_types.h"
 #include "xparameters.h"
 #include "xil_printf.h"
-
+#include <math.h>
 #define XPAR_MY_MULTIPLIER_0_S00_AXI_BASEADDR 0x43C00000
 #define XPAR_MY_MULTIPLIER_0_S01_AXI_BASEADDR 0x43C10000
 #define XPAR_MY_MULTIPLIER_0_S02_AXI_BASEADDR 0x43C20000
@@ -132,7 +133,7 @@ volatile int TimerExpired;
  * because it is the value the timer counter is loaded with when it is started
  */
 #define TIMER_PERIOD	 2500000
-
+#define MEAN_ARRAY_SIZE 5
 
 
 Xuint32 *baseaddr_p0 = (Xuint32 *)XPAR_MY_MULTIPLIER_0_S00_AXI_BASEADDR;
@@ -142,9 +143,23 @@ Xuint32 *baseaddr_p3 = (Xuint32 *)XPAR_MY_MULTIPLIER_0_S03_AXI_BASEADDR;
 Xuint32 *baseaddr_p4 = (Xuint32 *)XPAR_MY_MULTIPLIER_0_S04_AXI_BASEADDR;
 Xuint32 *baseaddr_p5 = (Xuint32 *)XPAR_MY_MULTIPLIER_0_S05_AXI_BASEADDR;
 
-short AccX, AccY, AccZ;
-short GyrX, GyrY, GyrZ;
+short accX, accY, accZ;
+short gyrX, gyrY, gyrZ;
 
+float accAngleX, accAngleY;
+
+float errAccAngleX, errAccAngleY, errAccAngleZ;
+float errGyrX, errGyrY, errGyrZ;
+const float PI = 3.14159265359;
+float speed;
+volatile unsigned counterDist;
+volatile unsigned kCounterDist = 0;
+float roll = 0, pitch = 0, lastRoll, lastPitch, lastAccZ;
+float accXN, accYN, accZN; //normalized acceleration
+float gyrXN, gyrYN;
+
+
+//function initialization
 static int TmrCtrSetupIntrSystem(INTC *IntcInstancePtr,
 				 XTmrCtr *TmrCtrInstancePtr,
 				 u16 DeviceId,
@@ -153,20 +168,51 @@ static int TmrCtrSetupIntrSystem(INTC *IntcInstancePtr,
 
 void TimerCounterHandler(void *CallBackRef, u8 TmrCtrNumber)
 {
+	float triggerZ, triggerPitch, triggerRoll;
+	const float elapsedTime = 0.0025;
+	kCounterDist++;
+	if(kCounterDist > counterDist)
+	{
+		kCounterDist = 0;
 		/*
-		 * Read the state of the data so that only the LED state can be
-		 * modified
-		 */
-		AccX = ((*(baseaddr_p0+1))>>16);
-		GyrX = ((*(baseaddr_p0+1))<<16)>>16;
-		AccY = ((*(baseaddr_p1+1))>>16);
-		GyrY = ((*(baseaddr_p1+1))<<16)>>16;
-		AccZ = ((*(baseaddr_p2+1))>>16);
-		GyrZ = ((*(baseaddr_p2+1))<<16)>>16;
-		xil_printf("%d;%d;", AccX, GyrX);
-		xil_printf("%d;%d;", AccY, GyrY);
-		xil_printf("%d;%d;", AccZ, GyrZ);
-		print("\n\r");
+		* Read the state of the data so that only the LED state can be
+		* modified
+		*/
+		accX = ((*(baseaddr_p0+1))>>16);
+		accY = ((*(baseaddr_p1+1))>>16);
+		accZ = ((*(baseaddr_p2+1))>>16);
+		accXN = accX / 16384.0;
+		accYN = accY / 16384.0;
+		accZN = (accZ / 16384.0) - errAccAngleZ;
+
+		accAngleX = (atan(accYN / sqrt(pow(accXN, 2) + pow(accZN, 2))) * 180 / PI) - errAccAngleX; // accErrorX ~(0.58) See the calculate_IMU_error()custom function for more details
+		accAngleY = (atan(-1 * accXN / sqrt(pow(accYN, 2) + pow(accZN, 2))) * 180 / PI) - errAccAngleY; // accErrorY ~(-1.58)
+
+		gyrX = (((*(baseaddr_p0+1))<<16)>>16);
+		gyrY = (((*(baseaddr_p1+1))<<16)>>16);
+
+		gyrXN = (gyrX / 131.0) + errGyrX;
+		gyrYN = (gyrY / 131.0) + errGyrY;
+
+		// Complementary filter - combine acceleromter and gyro angle values
+		roll = 0.9 * (roll + (gyrXN * elapsedTime/1000)) + 0.1 * accAngleX;
+		pitch = 0.9 * (pitch + (gyrYN * elapsedTime/1000)) + 0.1 * accAngleY;
+
+
+		triggerZ = abs(accZN - lastAccZ);
+		triggerPitch = abs(pitch - lastPitch);
+		triggerRoll = abs(roll - lastRoll);
+		if(triggerZ > 1)
+		{
+			if(triggerPitch > 0.5 || triggerRoll > 0.5)
+			{
+				xil_printf("PotHole\n\n\r");
+			}
+		}
+		lastAccZ = accZN;
+		lastPitch = pitch;
+		lastRoll = roll;
+	}
 }
 
 /*****************************************************************************/
@@ -438,16 +484,72 @@ static int TmrCtrSetupIntrSystem(INTC *IntcInstancePtr,
 	return XST_SUCCESS;
 }
 
+void calculate_IMU_error() {
+	int counter = 0;
+	const int measures = 100000;
+	xil_printf("Calculate IMU Error\n\n\r");
+	while(counter < measures)
+	{
+		accX = ((*(baseaddr_p0+1))>>16);
+		accY = ((*(baseaddr_p1+1))>>16);
+		accZ = ((*(baseaddr_p2+1))>>16);
+
+		gyrX = ((*(baseaddr_p0+1))<<16)>>16;
+		gyrY = ((*(baseaddr_p1+1))<<16)>>16;
+		gyrZ = ((*(baseaddr_p2+1))<<16)>>16;
+
+		accXN = accX / 16384.0;
+		accYN = accY / 16384.0;
+		accZN = accZ / 16384.0;
+
+		accAngleX += (atan(accYN / sqrt(pow(accXN, 2) + pow(accZN, 2))) * 180 / PI);
+		accAngleY += (atan(-1 * accXN / sqrt(pow(accYN, 2) + pow(accZN, 2))) * 180 / PI);
+		errAccAngleZ += accZN;
+
+		errGyrX += (gyrX / 131.0);
+		errGyrY += (gyrY / 131.0);
+		errGyrZ += (gyrZ / 131.0);
+
+		counter++;
+	}
+	errAccAngleX = errAccAngleX/measures;
+	errAccAngleY = errAccAngleY/measures;
+	errAccAngleZ = errAccAngleZ/measures;
+
+	errGyrX = errGyrX/measures;
+	errGyrY = errGyrY/measures;
+	errGyrZ = errGyrZ/measures;
+
+	accAngleX = (atan(accY / sqrt(pow(accX, 2) + pow(accZ, 2))) * 180 / PI) - errAccAngleX; // accErrorX ~(0.58) See the calculate_IMU_error()custom function for more details
+	accAngleY = (atan(-1 * accX / sqrt(pow(accY, 2) + pow(accZ, 2))) * 180 / PI) - errAccAngleY; // accErrorY ~(-1.58)
+	roll = accAngleX;
+	pitch = accAngleY;
+	lastRoll = roll;
+	lastPitch = pitch;
+	lastAccZ = accZN;
+	printf("Erro AccX: %.3f   AccY: %.3f   AccZ: %.3f\n", errAccAngleX, errAccAngleY, errAccAngleZ);
+	printf("Erro GyrX: %.3f   GyrY: %.3f   GyrZ: %.3f\n", errGyrX, errGyrY, errGyrZ);
+}
+
 int main()
 {
 	xil_printf("Init Platform\n\r");
 	init_platform();
 	xil_printf("Init Timer\n\r");
+	calculate_IMU_error();
+
+	speed = 10/3.6; //speed [m/s]
+	//Pothole size 25cm. Half = 12.5cm  = 0.125m.
+	// Timer Freq = 400Hz. Period = 2.5ms
+	counterDist = (int)((((0.125) / speed) * 1000) / 2.5);
+
 	TmrCtrIntrSetup(&InterruptController,
 					&TimerCounterInst,
 					TMRCTR_DEVICE_ID,
 					TMRCTR_INTERRUPT_ID,
 					TIMER_CNTR_0);
+	xil_printf("Finished Setup\n\r");
+	printf("counter: %d\n\n\r", counterDist);
 	while (1) {
 
 	}
