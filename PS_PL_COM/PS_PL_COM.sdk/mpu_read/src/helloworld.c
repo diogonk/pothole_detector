@@ -52,6 +52,14 @@
 #include "xparameters.h"
 #include "xil_printf.h"
 #include <math.h>
+#include "defines.h"
+#include "tinyGPS.h"
+#include "hardwareSerial.h"
+
+int uartSetup(u16 DeviceId);
+char uartPollRequest(u32 UartBaseAddress);
+int isDataAvailable(u32 UartBaseAddress);
+
 #define XPAR_MY_MULTIPLIER_0_S00_AXI_BASEADDR 0x43C00000
 #define XPAR_MY_MULTIPLIER_0_S01_AXI_BASEADDR 0x43C10000
 #define XPAR_MY_MULTIPLIER_0_S02_AXI_BASEADDR 0x43C20000
@@ -127,15 +135,6 @@ volatile int TimerExpired;
 #endif /* XPAR_INTC_0_DEVICE_ID */
 
 
-/*
- * The following constant is used to set the reset value of the timer counter,
- * making this number larger reduces the amount of time this example consumes
- * because it is the value the timer counter is loaded with when it is started
- */
-#define TIMER_PERIOD	 2500000
-#define MEAN_ARRAY_SIZE 5
-
-
 Xuint32 *baseaddr_p0 = (Xuint32 *)XPAR_MY_MULTIPLIER_0_S00_AXI_BASEADDR;
 Xuint32 *baseaddr_p1 = (Xuint32 *)XPAR_MY_MULTIPLIER_0_S01_AXI_BASEADDR;
 Xuint32 *baseaddr_p2 = (Xuint32 *)XPAR_MY_MULTIPLIER_0_S02_AXI_BASEADDR;
@@ -150,13 +149,17 @@ float accAngleX, accAngleY;
 
 float errAccAngleX, errAccAngleY, errAccAngleZ;
 float errGyrX, errGyrY, errGyrZ;
-const float PI = 3.14159265359;
-float speed;
+float GPSspeed;
 volatile unsigned counterDist;
 volatile unsigned kCounterDist = 0;
 float roll = 0, pitch = 0, lastRoll, lastPitch, lastAccZ;
 float accXN, accYN, accZN; //normalized acceleration
 float gyrXN, gyrYN;
+unsigned short potholeDetected = 0;
+
+//tinygps Struct
+
+TinyGPS gpsInfos;
 
 
 //function initialization
@@ -168,7 +171,7 @@ static int TmrCtrSetupIntrSystem(INTC *IntcInstancePtr,
 
 void TimerCounterHandler(void *CallBackRef, u8 TmrCtrNumber)
 {
-	float triggerZ, triggerPitch, triggerRoll;
+	volatile float triggerZ, triggerPitch, triggerRoll;
 	const float elapsedTime = 0.0025;
 	kCounterDist++;
 	if(kCounterDist > counterDist)
@@ -493,7 +496,6 @@ void calculate_IMU_error() {
 		accX = ((*(baseaddr_p0+1))>>16);
 		accY = ((*(baseaddr_p1+1))>>16);
 		accZ = ((*(baseaddr_p2+1))>>16);
-
 		gyrX = ((*(baseaddr_p0+1))<<16)>>16;
 		gyrY = ((*(baseaddr_p1+1))<<16)>>16;
 		gyrZ = ((*(baseaddr_p2+1))<<16)>>16;
@@ -520,8 +522,9 @@ void calculate_IMU_error() {
 	errGyrY = errGyrY/measures;
 	errGyrZ = errGyrZ/measures;
 
-	accAngleX = (atan(accY / sqrt(pow(accX, 2) + pow(accZ, 2))) * 180 / PI) - errAccAngleX; // accErrorX ~(0.58) See the calculate_IMU_error()custom function for more details
-	accAngleY = (atan(-1 * accX / sqrt(pow(accY, 2) + pow(accZ, 2))) * 180 / PI) - errAccAngleY; // accErrorY ~(-1.58)
+	accAngleX = (atan(accY / sqrt(pow(accX, 2) + pow(accZ, 2))) * 180 / PI) - errAccAngleX;
+	accAngleY = (atan(-1 * accX / sqrt(pow(accY, 2) + pow(accZ, 2))) * 180 / PI) - errAccAngleY;
+
 	roll = accAngleX;
 	pitch = accAngleY;
 	lastRoll = roll;
@@ -533,25 +536,37 @@ void calculate_IMU_error() {
 
 int main()
 {
+
+
 	xil_printf("Init Platform\n\r");
 	init_platform();
-	xil_printf("Init Timer\n\r");
 	calculate_IMU_error();
+	TinyGPS_init(&gpsInfos);
 
-	speed = 10/3.6; //speed [m/s]
+	//UART 0 SETUP -> GPS DEVICE
+	if(uartSetup(UART0_DEVICE_ID) != XST_SUCCESS)
+		xil_printf("GPS UART setup failed\n\r");
+	else
+		xil_printf("GPS UART setup success\n\r");
+
+	GPSspeed = 10/3.6; //speed [m/s]
 	//Pothole size 25cm. Half = 12.5cm  = 0.125m.
 	// Timer Freq = 400Hz. Period = 2.5ms
-	counterDist = (int)((((0.125) / speed) * 1000) / 2.5);
-
+	counterDist = (int)((((0.125) / GPSspeed) * 1000) / 2.5);
+	xil_printf("Init Timer\n\r");
 	TmrCtrIntrSetup(&InterruptController,
 					&TimerCounterInst,
 					TMRCTR_DEVICE_ID,
 					TMRCTR_INTERRUPT_ID,
 					TIMER_CNTR_0);
 	xil_printf("Finished Setup\n\r");
-	printf("counter: %d\n\n\r", counterDist);
 	while (1) {
-
+		if(isDataAvailable(UART0_BASEADDR))
+		{
+			encode(&gpsInfos, uartPollRequest(UART0_BASEADDR));
+			printf("speed: %.3f\r\n", f_speed_kmph(&gpsInfos));
+			//xil_printf("%c", uartPollRequest(UART0_BASEADDR));
+		}
 	}
 
 	xil_printf("End of test\n\n\r");
