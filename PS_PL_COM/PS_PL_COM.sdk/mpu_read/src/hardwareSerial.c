@@ -4,7 +4,7 @@
 
 int uartSetup(u16 DeviceId)
 {
-    XUartPs Uart_PS;
+	XUartPs Uart_PS;
 	int Status;
 	XUartPs_Config *Config;
 	xil_printf("Starting config\n\r");
@@ -13,18 +13,21 @@ int uartSetup(u16 DeviceId)
 	 * Look up the configuration in the config table and then initialize it.
 	 */
 	Config = XUartPs_LookupConfig(DeviceId);
-	if (NULL == Config) {
+	if (NULL == Config)
+	{
 		return XST_FAILURE;
 	}
 
 	Status = XUartPs_CfgInitialize(&Uart_PS, Config, Config->BaseAddress);
-	if (Status != XST_SUCCESS) {
+	if (Status != XST_SUCCESS)
+	{
 		return XST_FAILURE;
 	}
 
 	/* Check hardware build. */
 	Status = XUartPs_SelfTest(&Uart_PS);
-	if (Status != XST_SUCCESS) {
+	if (Status != XST_SUCCESS)
+	{
 		return XST_FAILURE;
 	}
 
@@ -33,7 +36,6 @@ int uartSetup(u16 DeviceId)
 	return XST_SUCCESS;
 }
 
-
 /*	input: Uart Device ID
 	output: char
 */
@@ -41,12 +43,12 @@ char uartPollRequest(u32 UartBaseAddress)
 {
 	//char infoRecv[MAX_BUFFER_SIZE];
 	char recvChar = 0;
-    recvChar = XUartPs_ReadReg(UartBaseAddress,
-        XUARTPS_FIFO_OFFSET);
+	recvChar = XUartPs_ReadReg(UartBaseAddress,
+							   XUARTPS_FIFO_OFFSET);
 	return recvChar;
 }
 
 int isDataAvailable(u32 UartBaseAddress)
 {
-    return XUartPs_IsReceiveData(UartBaseAddress)? 1 : 0;
+	return XUartPs_IsReceiveData(UartBaseAddress) ? 1 : 0;
 }

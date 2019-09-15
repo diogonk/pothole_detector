@@ -81,7 +81,6 @@ int isDataAvailable(u32 UartBaseAddress);
 #include "xil_printf.h"
 #endif
 
-
 /************************** Constant Definitions *****************************/
 #ifndef TESTAPP_GEN
 /*
@@ -89,36 +88,35 @@ int isDataAvailable(u32 UartBaseAddress);
  * xparameters.h file. They are only defined here such that a user can easily
  * change all the needed parameters in one place.
  */
-#define TMRCTR_DEVICE_ID	XPAR_TMRCTR_0_DEVICE_ID
-#define TMRCTR_INTERRUPT_ID	XPAR_FABRIC_TMRCTR_0_VEC_ID
+#define TMRCTR_DEVICE_ID XPAR_TMRCTR_0_DEVICE_ID
+#define TMRCTR_INTERRUPT_ID XPAR_FABRIC_TMRCTR_0_VEC_ID
 
 #ifdef XPAR_INTC_0_DEVICE_ID
-#define INTC_DEVICE_ID		XPAR_INTC_0_DEVICE_ID
+#define INTC_DEVICE_ID XPAR_INTC_0_DEVICE_ID
 #else
-#define INTC_DEVICE_ID		XPAR_SCUGIC_SINGLE_DEVICE_ID
+#define INTC_DEVICE_ID XPAR_SCUGIC_SINGLE_DEVICE_ID
 #endif /* XPAR_INTC_0_DEVICE_ID */
-
 
 /*
  * The following constant determines which timer counter of the device that is
  * used for this example, there are currently 2 timer counters in a device
  * and this example uses the first one, 0, the timer numbers are 0 based
  */
-#define TIMER_CNTR_0	 0
+#define TIMER_CNTR_0 0
 #endif
 #ifdef XPAR_INTC_0_DEVICE_ID
-#define INTC		XIntc
-#define INTC_HANDLER	XIntc_InterruptHandler
+#define INTC XIntc
+#define INTC_HANDLER XIntc_InterruptHandler
 #else
-#define INTC		XScuGic
-#define INTC_HANDLER	XScuGic_InterruptHandler
+#define INTC XScuGic
+#define INTC_HANDLER XScuGic_InterruptHandler
 #endif /* XPAR_INTC_0_DEVICE_ID */
 
 /************************** Variable Definitions *****************************/
 #ifndef TESTAPP_GEN
-INTC InterruptController;  /* The instance of the Interrupt Controller */
+INTC InterruptController; /* The instance of the Interrupt Controller */
 
-XTmrCtr TimerCounterInst;   /* The instance of the Timer Counter */
+XTmrCtr TimerCounterInst; /* The instance of the Timer Counter */
 #endif
 /*
  * The following variables are shared between non-interrupt processing and
@@ -127,13 +125,12 @@ XTmrCtr TimerCounterInst;   /* The instance of the Timer Counter */
 volatile int TimerExpired;
 
 #ifdef XPAR_INTC_0_DEVICE_ID
-#define INTC		XIntc
-#define INTC_HANDLER	XIntc_InterruptHandler
+#define INTC XIntc
+#define INTC_HANDLER XIntc_InterruptHandler
 #else
-#define INTC		XScuGic
-#define INTC_HANDLER	XScuGic_InterruptHandler
+#define INTC XScuGic
+#define INTC_HANDLER XScuGic_InterruptHandler
 #endif /* XPAR_INTC_0_DEVICE_ID */
-
 
 Xuint32 *baseaddr_p0 = (Xuint32 *)XPAR_MY_MULTIPLIER_0_S00_AXI_BASEADDR;
 Xuint32 *baseaddr_p1 = (Xuint32 *)XPAR_MY_MULTIPLIER_0_S01_AXI_BASEADDR;
@@ -161,55 +158,53 @@ unsigned short potholeDetected = 0;
 
 TinyGPS gpsInfos;
 
-
 //function initialization
 static int TmrCtrSetupIntrSystem(INTC *IntcInstancePtr,
-				 XTmrCtr *TmrCtrInstancePtr,
-				 u16 DeviceId,
-				 u16 IntrId,
-				 u8 TmrCtrNumber);
+								 XTmrCtr *TmrCtrInstancePtr,
+								 u16 DeviceId,
+								 u16 IntrId,
+								 u8 TmrCtrNumber);
 
 void TimerCounterHandler(void *CallBackRef, u8 TmrCtrNumber)
 {
 	volatile float triggerZ, triggerPitch, triggerRoll;
 	const float elapsedTime = 0.0025;
 	kCounterDist++;
-	if(kCounterDist > counterDist)
+	if (kCounterDist > counterDist)
 	{
 		kCounterDist = 0;
 		/*
 		* Read the state of the data so that only the LED state can be
 		* modified
 		*/
-		accX = ((*(baseaddr_p0+1))>>16);
-		accY = ((*(baseaddr_p1+1))>>16);
-		accZ = ((*(baseaddr_p2+1))>>16);
+		accX = ((*(baseaddr_p0 + 1)) >> 16);
+		accY = ((*(baseaddr_p1 + 1)) >> 16);
+		accZ = ((*(baseaddr_p2 + 1)) >> 16);
 		accXN = accX / 16384.0;
 		accYN = accY / 16384.0;
 		accZN = (accZ / 16384.0) - errAccAngleZ;
 
-		accAngleX = (atan(accYN / sqrt(pow(accXN, 2) + pow(accZN, 2))) * 180 / PI) - errAccAngleX; // accErrorX ~(0.58) See the calculate_IMU_error()custom function for more details
+		accAngleX = (atan(accYN / sqrt(pow(accXN, 2) + pow(accZN, 2))) * 180 / PI) - errAccAngleX;		// accErrorX ~(0.58) See the calculate_IMU_error()custom function for more details
 		accAngleY = (atan(-1 * accXN / sqrt(pow(accYN, 2) + pow(accZN, 2))) * 180 / PI) - errAccAngleY; // accErrorY ~(-1.58)
 
-		gyrX = (((*(baseaddr_p0+1))<<16)>>16);
-		gyrY = (((*(baseaddr_p1+1))<<16)>>16);
+		gyrX = (((*(baseaddr_p0 + 1)) << 16) >> 16);
+		gyrY = (((*(baseaddr_p1 + 1)) << 16) >> 16);
 
 		gyrXN = (gyrX / 131.0) + errGyrX;
 		gyrYN = (gyrY / 131.0) + errGyrY;
 
 		// Complementary filter - combine acceleromter and gyro angle values
-		roll = 0.9 * (roll + (gyrXN * elapsedTime/1000)) + 0.1 * accAngleX;
-		pitch = 0.9 * (pitch + (gyrYN * elapsedTime/1000)) + 0.1 * accAngleY;
-
+		roll = 0.9 * (roll + (gyrXN * elapsedTime / 1000)) + 0.1 * accAngleX;
+		pitch = 0.9 * (pitch + (gyrYN * elapsedTime / 1000)) + 0.1 * accAngleY;
 
 		triggerZ = abs(accZN - lastAccZ);
 		triggerPitch = abs(pitch - lastPitch);
 		triggerRoll = abs(roll - lastRoll);
-		if(triggerZ > 1)
+		if (triggerZ > 1)
 		{
-			if(triggerPitch > 0.5 || triggerRoll > 0.5)
+			if (triggerPitch > 0.31 || triggerRoll > 0.62)
 			{
-				xil_printf("PotHole\n\n\r");
+				potholeDetected = 1;
 			}
 		}
 		lastAccZ = accZN;
@@ -244,10 +239,10 @@ void TimerCounterHandler(void *CallBackRef, u8 TmrCtrNumber)
 *
 *****************************************************************************/
 int TmrCtrIntrSetup(INTC *IntcInstancePtr,
-			XTmrCtr *TmrCtrInstancePtr,
-			u16 DeviceId,
-			u16 IntrId,
-			u8 TmrCtrNumber)
+					XTmrCtr *TmrCtrInstancePtr,
+					u16 DeviceId,
+					u16 IntrId,
+					u8 TmrCtrNumber)
 {
 	int Status;
 	u32 SysClkPeriod;
@@ -258,7 +253,8 @@ int TmrCtrIntrSetup(INTC *IntcInstancePtr,
 	 * specify the device ID that is generated in xparameters.h
 	 */
 	Status = XTmrCtr_Initialize(TmrCtrInstancePtr, DeviceId);
-	if (Status != XST_SUCCESS) {
+	if (Status != XST_SUCCESS)
+	{
 		return XST_FAILURE;
 	}
 
@@ -267,7 +263,8 @@ int TmrCtrIntrSetup(INTC *IntcInstancePtr,
 	 * correctly, use the 1st timer in the device (0)
 	 */
 	Status = XTmrCtr_SelfTest(TmrCtrInstancePtr, TmrCtrNumber);
-	if (Status != XST_SUCCESS) {
+	if (Status != XST_SUCCESS)
+	{
 		return XST_FAILURE;
 	}
 
@@ -276,11 +273,12 @@ int TmrCtrIntrSetup(INTC *IntcInstancePtr,
 	 * interrupts can occur.  This function is application specific.
 	 */
 	Status = TmrCtrSetupIntrSystem(IntcInstancePtr,
-					TmrCtrInstancePtr,
-					DeviceId,
-					IntrId,
-					TmrCtrNumber);
-	if (Status != XST_SUCCESS) {
+								   TmrCtrInstancePtr,
+								   DeviceId,
+								   IntrId,
+								   TmrCtrNumber);
+	if (Status != XST_SUCCESS)
+	{
 		return XST_FAILURE;
 	}
 
@@ -300,21 +298,22 @@ int TmrCtrIntrSetup(INTC *IntcInstancePtr,
 	 * it would expire once only
 	 */
 	XTmrCtr_SetOptions(TmrCtrInstancePtr, TmrCtrNumber,
-				XTC_INT_MODE_OPTION | XTC_AUTO_RELOAD_OPTION);
+					   XTC_INT_MODE_OPTION | XTC_AUTO_RELOAD_OPTION);
 
 	/* Stop the timers if they are running */
-	if (TmrCtrInstancePtr->IsStartedTmrCtr0 == XIL_COMPONENT_IS_STARTED) {
+	if (TmrCtrInstancePtr->IsStartedTmrCtr0 == XIL_COMPONENT_IS_STARTED)
+	{
 		XTmrCtr_Stop(TmrCtrInstancePtr, XTC_TIMER_0);
 	}
 
 	/* Configure timers modes to be used for PWM */
 	CounterControlReg = XTmrCtr_ReadReg(TmrCtrInstancePtr->BaseAddress,
-					XTC_TIMER_0, XTC_TCSR_OFFSET);
+										XTC_TIMER_0, XTC_TCSR_OFFSET);
 	CounterControlReg |=
 		(XTC_CSR_DOWN_COUNT_MASK | XTC_CSR_AUTO_RELOAD_MASK);
 	CounterControlReg &= ~(XTC_CSR_CASC_MASK | XTC_CSR_EXT_GENERATE_MASK);
 	XTmrCtr_WriteReg(TmrCtrInstancePtr->BaseAddress, XTC_TIMER_0,
-					XTC_TCSR_OFFSET, CounterControlReg);
+					 XTC_TCSR_OFFSET, CounterControlReg);
 	/*
 	 * Set a reset value for the timer counter such that it will expire
 	 * eariler than letting it roll over from 0, the reset value is loaded
@@ -323,23 +322,25 @@ int TmrCtrIntrSetup(INTC *IntcInstancePtr,
 	SysClkPeriod = XTC_HZ_TO_NS(TmrCtrInstancePtr->Config.SysClockFreqHz);
 	xil_printf("SysclkPeriod: %d \n\r", SysClkPeriod);
 	xil_printf("TimerPeriod: %d \n\r", TIMER_PERIOD);
-	if (TIMER_PERIOD < (2 * SysClkPeriod)) {
+	if (TIMER_PERIOD < (2 * SysClkPeriod))
+	{
 		return XST_INVALID_PARAM;
 	}
 	Period = XTC_ROUND_DIV(TIMER_PERIOD, SysClkPeriod) - 2;
-	if (Period > XTC_MAX_LOAD_VALUE) {
+	if (Period > XTC_MAX_LOAD_VALUE)
+	{
 		return XST_INVALID_PARAM;
 	}
 
 	//XTmrCtr_SetResetValue(TmrCtrInstancePtr, TmrCtrNumber, (u32)Period);
 	XTmrCtr_WriteReg(TmrCtrInstancePtr->BaseAddress, XTC_TIMER_0,
-						XTC_TLR_OFFSET, (u32)Period);
+					 XTC_TLR_OFFSET, (u32)Period);
 	/* Configure timers in generate mode */
 	CounterControlReg = XTmrCtr_ReadReg(TmrCtrInstancePtr->BaseAddress,
-					XTC_TIMER_0, XTC_TCSR_OFFSET);
+										XTC_TIMER_0, XTC_TCSR_OFFSET);
 	CounterControlReg &= ~(XTC_CSR_CAPTURE_MODE_MASK);
 	XTmrCtr_WriteReg(TmrCtrInstancePtr->BaseAddress, XTC_TIMER_0,
-					XTC_TCSR_OFFSET, CounterControlReg);
+					 XTC_TCSR_OFFSET, CounterControlReg);
 	/*
 	 * Start the timer counter such that it's incrementing by default,
 	 * then wait for it to timeout a number of times
@@ -347,8 +348,6 @@ int TmrCtrIntrSetup(INTC *IntcInstancePtr,
 	XTmrCtr_Start(TmrCtrInstancePtr, TmrCtrNumber);
 	return XST_SUCCESS;
 }
-
-
 
 /*****************************************************************************/
 /**
@@ -375,12 +374,12 @@ int TmrCtrIntrSetup(INTC *IntcInstancePtr,
 *
 ******************************************************************************/
 static int TmrCtrSetupIntrSystem(INTC *IntcInstancePtr,
-				 XTmrCtr *TmrCtrInstancePtr,
-				 u16 DeviceId,
-				 u16 IntrId,
-				 u8 TmrCtrNumber)
+								 XTmrCtr *TmrCtrInstancePtr,
+								 u16 DeviceId,
+								 u16 IntrId,
+								 u8 TmrCtrNumber)
 {
-	 int Status;
+	int Status;
 
 #ifdef XPAR_INTC_0_DEVICE_ID
 #ifndef TESTAPP_GEN
@@ -399,9 +398,10 @@ static int TmrCtrSetupIntrSystem(INTC *IntcInstancePtr,
 	 * specific interrupt processing for the device
 	 */
 	Status = XIntc_Connect(IntcInstancePtr, IntrId,
-				(XInterruptHandler)XTmrCtr_InterruptHandler,
-				(void *)TmrCtrInstancePtr);
-	if (Status != XST_SUCCESS) {
+						   (XInterruptHandler)XTmrCtr_InterruptHandler,
+						   (void *)TmrCtrInstancePtr);
+	if (Status != XST_SUCCESS)
+	{
 		return XST_FAILURE;
 	}
 
@@ -412,7 +412,8 @@ static int TmrCtrSetupIntrSystem(INTC *IntcInstancePtr,
 	 * the timer counter can cause interrupts thru the interrupt controller.
 	 */
 	Status = XIntc_Start(IntcInstancePtr, XIN_REAL_MODE);
-	if (Status != XST_SUCCESS) {
+	if (Status != XST_SUCCESS)
+	{
 		return XST_FAILURE;
 	}
 #endif
@@ -432,28 +433,31 @@ static int TmrCtrSetupIntrSystem(INTC *IntcInstancePtr,
 	 * use.
 	 */
 	IntcConfig = XScuGic_LookupConfig(INTC_DEVICE_ID);
-	if (NULL == IntcConfig) {
+	if (NULL == IntcConfig)
+	{
 		return XST_FAILURE;
 	}
 
 	Status = XScuGic_CfgInitialize(IntcInstancePtr, IntcConfig,
-					IntcConfig->CpuBaseAddress);
-	if (Status != XST_SUCCESS) {
+								   IntcConfig->CpuBaseAddress);
+	if (Status != XST_SUCCESS)
+	{
 		return XST_FAILURE;
 	}
 #endif /* TESTAPP_GEN */
 
 	XScuGic_SetPriorityTriggerType(IntcInstancePtr, IntrId,
-					0xA0, 0x3);
+								   0xA0, 0x3);
 
 	/*
 	 * Connect the interrupt handler that will be called when an
 	 * interrupt occurs for the device.
 	 */
 	Status = XScuGic_Connect(IntcInstancePtr, IntrId,
-				 (Xil_ExceptionHandler)XTmrCtr_InterruptHandler,
-				 TmrCtrInstancePtr);
-	if (Status != XST_SUCCESS) {
+							 (Xil_ExceptionHandler)XTmrCtr_InterruptHandler,
+							 TmrCtrInstancePtr);
+	if (Status != XST_SUCCESS)
+	{
 		return Status;
 	}
 
@@ -462,7 +466,6 @@ static int TmrCtrSetupIntrSystem(INTC *IntcInstancePtr,
 	 */
 	XScuGic_Enable(IntcInstancePtr, IntrId);
 #endif /* XPAR_INTC_0_DEVICE_ID */
-
 
 #ifndef TESTAPP_GEN
 	/*
@@ -474,9 +477,9 @@ static int TmrCtrSetupIntrSystem(INTC *IntcInstancePtr,
 	 * Register the interrupt controller handler with the exception table.
 	 */
 	Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
-					(Xil_ExceptionHandler)
-					INTC_HANDLER,
-					IntcInstancePtr);
+								 (Xil_ExceptionHandler)
+									 INTC_HANDLER,
+								 IntcInstancePtr);
 
 	/*
 	 * Enable non-critical exceptions.
@@ -487,18 +490,19 @@ static int TmrCtrSetupIntrSystem(INTC *IntcInstancePtr,
 	return XST_SUCCESS;
 }
 
-void calculate_IMU_error() {
+void calculate_IMU_error()
+{
 	int counter = 0;
 	const int measures = 100000;
 	xil_printf("Calculate IMU Error\n\n\r");
-	while(counter < measures)
+	while (counter < measures)
 	{
-		accX = ((*(baseaddr_p0+1))>>16);
-		accY = ((*(baseaddr_p1+1))>>16);
-		accZ = ((*(baseaddr_p2+1))>>16);
-		gyrX = ((*(baseaddr_p0+1))<<16)>>16;
-		gyrY = ((*(baseaddr_p1+1))<<16)>>16;
-		gyrZ = ((*(baseaddr_p2+1))<<16)>>16;
+		accX = ((*(baseaddr_p0 + 1)) >> 16);
+		accY = ((*(baseaddr_p1 + 1)) >> 16);
+		accZ = ((*(baseaddr_p2 + 1)) >> 16);
+		gyrX = ((*(baseaddr_p0 + 1)) << 16) >> 16;
+		gyrY = ((*(baseaddr_p1 + 1)) << 16) >> 16;
+		gyrZ = ((*(baseaddr_p2 + 1)) << 16) >> 16;
 
 		accXN = accX / 16384.0;
 		accYN = accY / 16384.0;
@@ -514,13 +518,13 @@ void calculate_IMU_error() {
 
 		counter++;
 	}
-	errAccAngleX = errAccAngleX/measures;
-	errAccAngleY = errAccAngleY/measures;
-	errAccAngleZ = errAccAngleZ/measures;
+	errAccAngleX = errAccAngleX / measures;
+	errAccAngleY = errAccAngleY / measures;
+	errAccAngleZ = errAccAngleZ / measures;
 
-	errGyrX = errGyrX/measures;
-	errGyrY = errGyrY/measures;
-	errGyrZ = errGyrZ/measures;
+	errGyrX = errGyrX / measures;
+	errGyrY = errGyrY / measures;
+	errGyrZ = errGyrZ / measures;
 
 	accAngleX = (atan(accY / sqrt(pow(accX, 2) + pow(accZ, 2))) * 180 / PI) - errAccAngleX;
 	accAngleY = (atan(-1 * accX / sqrt(pow(accY, 2) + pow(accZ, 2))) * 180 / PI) - errAccAngleY;
@@ -537,22 +541,24 @@ void calculate_IMU_error() {
 int main()
 {
 
-
+	float GPSSPeedKMPH = 1;
+	float latitude, longitude;
 	xil_printf("Init Platform\n\r");
 	init_platform();
 	calculate_IMU_error();
 	TinyGPS_init(&gpsInfos);
 
 	//UART 0 SETUP -> GPS DEVICE
-	if(uartSetup(UART0_DEVICE_ID) != XST_SUCCESS)
+	if (uartSetup(UART0_DEVICE_ID) != XST_SUCCESS)
 		xil_printf("GPS UART setup failed\n\r");
 	else
 		xil_printf("GPS UART setup success\n\r");
 
-	GPSspeed = 10/3.6; //speed [m/s]
 	//Pothole size 25cm. Half = 12.5cm  = 0.125m.
 	// Timer Freq = 400Hz. Period = 2.5ms
-	counterDist = (int)((((0.125) / GPSspeed) * 1000) / 2.5);
+	GPSspeed = GPSSPeedKMPH / 3.6; //speed [m/s]	initial value
+	counterDist = (int)(COUNTER_CONST / GPSspeed);
+
 	xil_printf("Init Timer\n\r");
 	TmrCtrIntrSetup(&InterruptController,
 					&TimerCounterInst,
@@ -560,16 +566,28 @@ int main()
 					TMRCTR_INTERRUPT_ID,
 					TIMER_CNTR_0);
 	xil_printf("Finished Setup\n\r");
-	while (1) {
-		if(isDataAvailable(UART0_BASEADDR))
+	while (1)
+	{
+		if (isDataAvailable(UART0_BASEADDR))
 		{
 			encode(&gpsInfos, uartPollRequest(UART0_BASEADDR));
 			printf("speed: %.3f\r\n", f_speed_kmph(&gpsInfos));
-			//xil_printf("%c", uartPollRequest(UART0_BASEADDR));
+
+			if (GPSSPeedKMPH = f_speed_kmph(&gpsInfos) < 1)
+				GPSSPeedKMPH = 1;
+
+			GPSspeed = GPSSPeedKMPH / 3.6; //speed [m/s]	initial value
+			counterDist = (int)(COUNTER_CONST / GPSspeed);
+			if(potholeDetected == 1)
+			{
+				get_position(&gpsInfos, &latitude, &longitude, 0);
+				printf("Pothole Detected! %f,%f\r\n", latitude, longitude);
+				potholeDetected = 0;
+			}
 		}
 	}
 
 	xil_printf("End of test\n\n\r");
 
-return 0;
+	return 0;
 }
