@@ -200,7 +200,7 @@ void TimerCounterHandler(void *CallBackRef, u8 TmrCtrNumber)
 		triggerZ = abs(accZN - lastAccZ);
 		triggerPitch = abs(pitch - lastPitch);
 		triggerRoll = abs(roll - lastRoll);
-		if (triggerZ > 1)
+		if (triggerZ > 0.8)
 		{
 			if (triggerPitch > 0.31 || triggerRoll > 0.62)
 			{
@@ -543,6 +543,7 @@ int main()
 
 	float GPSSPeedKMPH = 1;
 	float latitude, longitude;
+	unsigned long date, time, age;
 	xil_printf("Init Platform\n\r");
 	init_platform();
 	calculate_IMU_error();
@@ -571,17 +572,18 @@ int main()
 		if (isDataAvailable(UART0_BASEADDR))
 		{
 			encode(&gpsInfos, uartPollRequest(UART0_BASEADDR));
-			printf("speed: %.3f\r\n", f_speed_kmph(&gpsInfos));
+			//printf("speed: %.3f\r\n", f_speed_kmph(&gpsInfos));
 
-			if (GPSSPeedKMPH = f_speed_kmph(&gpsInfos) < 1)
+			if ((GPSSPeedKMPH = f_speed_kmph(&gpsInfos)) < 1)
 				GPSSPeedKMPH = 1;
 
 			GPSspeed = GPSSPeedKMPH / 3.6; //speed [m/s]	initial value
 			counterDist = (int)(COUNTER_CONST / GPSspeed);
 			if(potholeDetected == 1)
 			{
-				get_position(&gpsInfos, &latitude, &longitude, 0);
-				printf("Pothole Detected! %f,%f\r\n", latitude, longitude);
+				get_datetime(&gpsInfos, &date, &time, &age);
+				f_get_position(&gpsInfos, &latitude, &longitude, &age);
+				printf("%lu %lu: %.5f,%.5f\r\n", date, time, latitude, longitude);
 				potholeDetected = 0;
 			}
 		}
