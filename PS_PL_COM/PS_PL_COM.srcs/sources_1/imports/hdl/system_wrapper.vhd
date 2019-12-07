@@ -48,7 +48,8 @@ entity system_wrapper is
     SCL_1			: inout	std_logic;
     SDA_2			: inout	std_logic;
     SCL_2			: inout	std_logic;
-    FILTER_ON : in std_logic
+    FILTER_ON : in std_logic;
+    RUNNING   : out   std_logic
   );
 end system_wrapper;
 
@@ -121,8 +122,7 @@ architecture STRUCTURE of system_wrapper is
         X_GYR	      : out   std_logic_vector(15 downto 0);
         Y_GYR	      : out   std_logic_vector(15 downto 0);
         Z_GYR	      : out   std_logic_vector(15 downto 0);
-        NEW_READ	  : out	  std_logic;
-        RUNNING     : out   std_logic
+        NEW_READ	  : out	  std_logic
     );
 end component DEMO_MPU6050;
 
