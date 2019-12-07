@@ -44,24 +44,30 @@ entity system_wrapper is
     
     MCLK		: in	std_logic;
     RESET		: in	std_logic;
-    SDA			: inout	std_logic;
-    SCL			: inout	std_logic;
-    LEDX		: out	std_logic;
-    LEDY		: out	std_logic;
-    LEDZ		: out	std_logic;
-    LEDSIGN		: out	std_logic
+    SDA_1			: inout	std_logic;
+    SCL_1			: inout	std_logic;
+    SDA_2			: inout	std_logic;
+    SCL_2			: inout	std_logic;
+    FILTER_ON : in std_logic
   );
 end system_wrapper;
 
 architecture STRUCTURE of system_wrapper is
 
-    signal S_X_ACC	: std_logic_vector(15 downto 0);
-    signal S_Y_ACC	: std_logic_vector(15 downto 0);
-    signal S_Z_ACC	: std_logic_vector(15 downto 0);
-    signal S_X_GYR	: std_logic_vector(15 downto 0);
-    signal S_Y_GYR	: std_logic_vector(15 downto 0);
-    signal S_Z_GYR	: std_logic_vector(15 downto 0);
-    signal NEW_READ : std_logic;
+    signal S_X_ACC_1	: std_logic_vector(15 downto 0);
+    signal S_Y_ACC_1	: std_logic_vector(15 downto 0);
+    signal S_Z_ACC_1	: std_logic_vector(15 downto 0);
+    signal S_X_GYR_1	: std_logic_vector(15 downto 0);
+    signal S_Y_GYR_1	: std_logic_vector(15 downto 0);
+    signal S_Z_GYR_1	: std_logic_vector(15 downto 0);
+    signal S_X_ACC_2	: std_logic_vector(15 downto 0);
+    signal S_Y_ACC_2	: std_logic_vector(15 downto 0);
+    signal S_Z_ACC_2	: std_logic_vector(15 downto 0);
+    signal S_X_GYR_2	: std_logic_vector(15 downto 0);
+    signal S_Y_GYR_2	: std_logic_vector(15 downto 0);
+    signal S_Z_GYR_2	: std_logic_vector(15 downto 0);
+    signal NEW_READ_1 : std_logic;
+    signal NEW_READ_2 : std_logic;
     signal s00_axi_data_in_0 : std_logic_vector(31 downto 0);
     signal s01_axi_data_in_0 : std_logic_vector(31 downto 0);
     signal s02_axi_data_in_0 : std_logic_vector(31 downto 0);
@@ -104,21 +110,19 @@ architecture STRUCTURE of system_wrapper is
   
   component DEMO_MPU6050 is
     port(
-        MCLK		: in	std_logic;
-        RESET		: in	std_logic;
-        SDA			: inout	std_logic;
-        SCL			: inout	std_logic;
-        LEDX		: out	std_logic;
-        LEDY		: out	std_logic;
-        LEDZ		: out	std_logic;
-        LEDSIGN		: out	std_logic;
-        X_ACC	    : out   std_logic_vector(15 downto 0);
-        Y_ACC	    : out   std_logic_vector(15 downto 0);
-        Z_ACC	    : out   std_logic_vector(15 downto 0);
-        X_GYR	    : out   std_logic_vector(15 downto 0);
-        Y_GYR	    : out   std_logic_vector(15 downto 0);
-        Z_GYR	    : out   std_logic_vector(15 downto 0);
-        NEW_READ	: out	std_logic
+        MCLK		    : in	  std_logic;
+        RESET		    : in	  std_logic;
+        SDA			    : inout	std_logic;
+        SCL			    : inout	std_logic;
+        FILTER_ON   : in    std_logic;
+        X_ACC	      : out   std_logic_vector(15 downto 0);
+        Y_ACC	      : out   std_logic_vector(15 downto 0);
+        Z_ACC	      : out   std_logic_vector(15 downto 0);
+        X_GYR	      : out   std_logic_vector(15 downto 0);
+        Y_GYR	      : out   std_logic_vector(15 downto 0);
+        Z_GYR	      : out   std_logic_vector(15 downto 0);
+        NEW_READ	  : out	  std_logic;
+        RUNNING     : out   std_logic
     );
 end component DEMO_MPU6050;
 
@@ -157,22 +161,35 @@ system_i: component system
     
 MPU6050_1: component DEMO_MPU6050
   port map(
-    MCLK		=> MCLK,
-    RESET		=> RESET,
-    SDA			=> SDA,
-    SCL			=> SCL,
-    LEDX		=> LEDX,
-    LEDY		=> LEDY,
-    LEDZ		=> LEDZ,
-    LEDSIGN		=> LEDSIGN,
-    X_ACC	    => S_X_ACC,
-    Y_ACC	    => S_Y_ACC,
-    Z_ACC	    => S_Z_ACC,
-    X_GYR	    => S_X_GYR,
-    Y_GYR	    => S_Y_GYR,
-    Z_GYR	    => S_Z_GYR,
-    NEW_READ    => NEW_READ
+    MCLK		  => MCLK,
+    RESET		  => RESET,
+    SDA			  => SDA_1,
+    SCL			  => SCL_1,
+    FILTER_ON => FILTER_ON,
+    X_ACC	    => S_X_ACC_1,
+    Y_ACC	    => S_Y_ACC_1,
+    Z_ACC	    => S_Z_ACC_1,
+    X_GYR	    => S_X_GYR_1,
+    Y_GYR	    => S_Y_GYR_1,
+    Z_GYR	    => S_Z_GYR_1,
+    NEW_READ    => NEW_READ_1
     );
+
+    MPU6050_2: component DEMO_MPU6050
+    port map(
+      MCLK		=> MCLK,
+      RESET		=> RESET,
+      SDA			=> SDA_2,
+      SCL			=> SCL_2,
+      FILTER_ON => FILTER_ON,
+      X_ACC	    => S_X_ACC_2,
+      Y_ACC	    => S_Y_ACC_2,
+      Z_ACC	    => S_Z_ACC_2,
+      X_GYR	    => S_X_GYR_2,
+      Y_GYR	    => S_Y_GYR_2,
+      Z_GYR	    => S_Z_GYR_2,
+      NEW_READ    => NEW_READ_2
+      );
 
     process(MCLK)
     begin
@@ -180,16 +197,24 @@ MPU6050_1: component DEMO_MPU6050
             s00_axi_data_in_0 <= (others =>'0');
             s01_axi_data_in_0 <= (others =>'0');
             s02_axi_data_in_0 <= (others =>'0');
+        elsif(rising_edge(NEW_READ_1)) then
+            s00_axi_data_in_0 <= S_X_ACC_1 & S_X_GYR_1;
+            s01_axi_data_in_0 <= S_Y_ACC_1 & S_Y_GYR_1;
+            s02_axi_data_in_0 <= S_Z_ACC_1 & S_Z_GYR_1;
+        end if;
+    end process;
+
+    process(MCLK)
+    begin
+        if(RESET = '1') then
             s03_axi_data_in_0 <= (others =>'0');
             s04_axi_data_in_0 <= (others =>'0');
             s05_axi_data_in_0 <= (others =>'0');
-        elsif(rising_edge(NEW_READ)) then
-            s00_axi_data_in_0 <= S_X_ACC & S_X_GYR;
-            s01_axi_data_in_0 <= S_Y_ACC & S_Y_GYR;
-            s02_axi_data_in_0 <= S_Z_ACC & S_Z_GYR;
-            s03_axi_data_in_0 <= S_X_ACC & S_X_GYR;
-            s04_axi_data_in_0 <= S_Y_ACC & S_Y_GYR;
-            s05_axi_data_in_0 <= S_Z_ACC & S_Z_GYR;
+        elsif(rising_edge(NEW_READ_2)) then
+            s03_axi_data_in_0 <= S_X_ACC_2 & S_X_GYR_2;
+            s04_axi_data_in_0 <= S_Y_ACC_2 & S_Y_GYR_2;
+            s05_axi_data_in_0 <= S_Z_ACC_2 & S_Z_GYR_2;
         end if;
     end process;
+    RUNNING <= not RESET;
 end STRUCTURE;

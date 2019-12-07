@@ -139,22 +139,35 @@ Xuint32 *baseaddr_p3 = (Xuint32 *)XPAR_MY_MULTIPLIER_0_S03_AXI_BASEADDR;
 Xuint32 *baseaddr_p4 = (Xuint32 *)XPAR_MY_MULTIPLIER_0_S04_AXI_BASEADDR;
 Xuint32 *baseaddr_p5 = (Xuint32 *)XPAR_MY_MULTIPLIER_0_S05_AXI_BASEADDR;
 
-short accX, accY, accZ;
-short gyrX, gyrY, gyrZ;
+short accX_1, accY_1, accZ_1;
+short gyrX_1, gyrY_1, gyrZ_1;
 
-float accAngleX, accAngleY;
+short accX_2, accY_2, accZ_2;
+short gyrX_2, gyrY_2, gyrZ_2;
 
-float errAccAngleX, errAccAngleY, errAccAngleZ;
-float errGyrX, errGyrY, errGyrZ;
+
+float accPitch_1, accRoll_1;
+float accPitch_2, accRoll_2;
+
+float errAccPitch_1, errAccRoll_1, errAccAngleZ_1;
+float errGyrX_1, errGyrY_1, errGyrZ_1;
+
+float errAccPitch_2, errAccRoll_2, errAccAngleZ_2;
+float errGyrX_2, errGyrY_2, errGyrZ_2;
+
 float GPSspeed;
 volatile unsigned counterDist;
 volatile unsigned kCounterDist = 0;
-float roll = 0, pitch = 0, lastRoll, lastPitch, lastAccZ;
-float accXN, accYN, accZN; //normalized acceleration
-float gyrXN, gyrYN;
-unsigned short potholeDetected = 0;
 
-//tinygps Struct
+float roll_1 = 0, pitch_1 = 0, lastRoll_1, lastPitch_1, lastAccZ_1;
+float accXN_1, accYN_1, accZN_1; //normalized acceleration
+float gyrXN_1, gyrYN_1;
+
+float roll_2 = 0, pitch_2 = 0, lastRoll_2, lastPitch_2, lastAccZ_2;
+float accXN_2, accYN_2, accZN_2; //normalized acceleration
+float gyrXN_2, gyrYN_2;
+
+unsigned short potholeDetected = 0;
 
 TinyGPS gpsInfos;
 
@@ -167,49 +180,86 @@ static int TmrCtrSetupIntrSystem(INTC *IntcInstancePtr,
 
 void TimerCounterHandler(void *CallBackRef, u8 TmrCtrNumber)
 {
-	volatile float triggerZ, triggerPitch, triggerRoll;
-	const float elapsedTime = 0.0025;
+	volatile float triggerZ_1, triggerPitch_1, triggerRoll_1;
+	volatile float triggerZ_2, triggerPitch_2, triggerRoll_2;
+	/*
+	* Read the state of the data so that only the LED state can be
+	* modified
+	*/
+	//get values from FPGA
+	accX_1 = ((*(baseaddr_p0 + 1)) >> 16);
+	accY_1 = ((*(baseaddr_p1 + 1)) >> 16);
+	accZ_1 = ((*(baseaddr_p2 + 1)) >> 16);
+
+	accX_2 = ((*(baseaddr_p3 + 1)) >> 16);
+	accY_2 = ((*(baseaddr_p4 + 1)) >> 16);
+	accZ_2 = ((*(baseaddr_p5 + 1)) >> 16);
+
+	//Convert value to acceleration
+	accXN_1 = accX_1 / 16384.0;
+	accYN_1 = accY_1 / 16384.0;
+	accZN_1 = accZ_1 / 16384.0;
+
+	accXN_2 = accX_2 / 16384.0;
+	accYN_2 = accY_2 / 16384.0;
+	accZN_2 = accZ_2 / 16384.0;
+
+	//Calculate angles from accelerometer
+	accPitch_1 = (atan(accXN_1 / sqrt((accYN_1 * accYN_1) + (accZN_1 * accZN_1))) * 180 / PI) - errAccPitch_1;
+	accRoll_1  = (atan(accYN_1 / sqrt((accXN_1 * accXN_1) + (accZN_1 * accZN_1))) * 180 / PI) - errAccRoll_1;
+
+	accPitch_2 = (atan(accXN_2 / sqrt((accYN_2 * accYN_2) + (accZN_2 * accZN_2))) * 180 / PI) - errAccPitch_2;
+	accRoll_2  = (atan(accYN_2 / sqrt((accXN_2 * accXN_2) + (accZN_2 * accZN_2))) * 180 / PI) - errAccRoll_2;
+
+
+	// get values from gyroscope
+	gyrX_1 = (((*(baseaddr_p0 + 1)) << 16) >> 16);
+	gyrY_1 = (((*(baseaddr_p1 + 1)) << 16) >> 16);
+
+	gyrX_2 = (((*(baseaddr_p3 + 1)) << 16) >> 16);
+	gyrY_2 = (((*(baseaddr_p4 + 1)) << 16) >> 16);
+
+	gyrXN_1 = (gyrX_1 / 131.0) + errGyrX_1;
+	gyrYN_1 = (gyrY_1 / 131.0) + errGyrY_1;
+
+	gyrXN_2 = (gyrX_1 / 131.0) + errGyrX_2;
+	gyrYN_2 = (gyrY_1 / 131.0) + errGyrY_2;
+
+	// Complementary filter - combine accelerometer and gyro angle values
+	roll_1  = 0.9 * (roll_1 + (gyrXN_1 * elapsedTime / 1000)) + 0.1 * accRoll_1;
+	pitch_1 = 0.9 * (pitch_1 + (gyrYN_1 * elapsedTime / 1000)) + 0.1 * accPitch_1;
+
+	roll_2  = 0.9 * (roll_2 + (gyrXN_2 * elapsedTime / 1000)) + 0.1 * accRoll_2;
+	pitch_2 = 0.9 * (pitch_2 + (gyrYN_2 * elapsedTime / 1000)) + 0.1 * accPitch_2;
+
+	//Here it verifies if distance is bigger than 5cm
 	kCounterDist++;
 	if (kCounterDist > counterDist)
 	{
 		kCounterDist = 0;
-		/*
-		* Read the state of the data so that only the LED state can be
-		* modified
-		*/
-		accX = ((*(baseaddr_p0 + 1)) >> 16);
-		accY = ((*(baseaddr_p1 + 1)) >> 16);
-		accZ = ((*(baseaddr_p2 + 1)) >> 16);
-		accXN = accX / 16384.0;
-		accYN = accY / 16384.0;
-		accZN = (accZ / 16384.0) - errAccAngleZ;
+		triggerZ_1 = abs(accZN_1 - lastAccZ_1);
+		triggerPitch_1 = abs(pitch_1 - lastPitch_1);
+		triggerRoll_1 = abs(roll_1 - lastRoll_1);
 
-		accAngleX = (atan(accYN / sqrt(pow(accXN, 2) + pow(accZN, 2))) * 180 / PI) - errAccAngleX;		// accErrorX ~(0.58) See the calculate_IMU_error()custom function for more details
-		accAngleY = (atan(-1 * accXN / sqrt(pow(accYN, 2) + pow(accZN, 2))) * 180 / PI) - errAccAngleY; // accErrorY ~(-1.58)
+		triggerZ_2 = abs(accZN_2 - lastAccZ_2);
+		triggerPitch_2 = abs(pitch_2 - lastPitch_2);
+		triggerRoll_2 = abs(roll_2 - lastRoll_2);
 
-		gyrX = (((*(baseaddr_p0 + 1)) << 16) >> 16);
-		gyrY = (((*(baseaddr_p1 + 1)) << 16) >> 16);
-
-		gyrXN = (gyrX / 131.0) + errGyrX;
-		gyrYN = (gyrY / 131.0) + errGyrY;
-
-		// Complementary filter - combine acceleromter and gyro angle values
-		roll = 0.9 * (roll + (gyrXN * elapsedTime / 1000)) + 0.1 * accAngleX;
-		pitch = 0.9 * (pitch + (gyrYN * elapsedTime / 1000)) + 0.1 * accAngleY;
-
-		triggerZ = abs(accZN - lastAccZ);
-		triggerPitch = abs(pitch - lastPitch);
-		triggerRoll = abs(roll - lastRoll);
-		if (triggerZ > 0.8)
+		if (triggerZ_1 > 0.8 || triggerZ_2 > 0.8)
 		{
-			if (triggerPitch > 0.31 || triggerRoll > 0.62)
+			if ((triggerPitch_1 > 0.25 && triggerRoll_1 > 0.50) ||
+					(triggerPitch_2 > 0.25 && triggerRoll_2 > 0.50))
 			{
 				potholeDetected = 1;
 			}
 		}
-		lastAccZ = accZN;
-		lastPitch = pitch;
-		lastRoll = roll;
+		lastAccZ_1 = accZN_1;
+		lastPitch_1 = pitch_1;
+		lastRoll_1 = roll_1;
+
+		lastAccZ_2 = accZN_2;
+		lastPitch_2 = pitch_2;
+		lastRoll_2 = roll_2;
 	}
 }
 
@@ -497,45 +547,75 @@ void calculate_IMU_error()
 	xil_printf("Calculate IMU Error\n\n\r");
 	while (counter < measures)
 	{
-		accX = ((*(baseaddr_p0 + 1)) >> 16);
-		accY = ((*(baseaddr_p1 + 1)) >> 16);
-		accZ = ((*(baseaddr_p2 + 1)) >> 16);
-		gyrX = ((*(baseaddr_p0 + 1)) << 16) >> 16;
-		gyrY = ((*(baseaddr_p1 + 1)) << 16) >> 16;
-		gyrZ = ((*(baseaddr_p2 + 1)) << 16) >> 16;
+		accX_1 = ((*(baseaddr_p0 + 1)) >> 16);
+		accY_1 = ((*(baseaddr_p1 + 1)) >> 16);
+		accZ_1 = ((*(baseaddr_p2 + 1)) >> 16);
+		gyrX_1 = ((*(baseaddr_p0 + 1)) << 16) >> 16;
+		gyrY_1 = ((*(baseaddr_p1 + 1)) << 16) >> 16;
+		gyrZ_1 = ((*(baseaddr_p2 + 1)) << 16) >> 16;
 
-		accXN = accX / 16384.0;
-		accYN = accY / 16384.0;
-		accZN = accZ / 16384.0;
+		accXN_1 = accX_1 / 16384.0;
+		accYN_1 = accY_1 / 16384.0;
+		accZN_1 = accZ_1 / 16384.0;
 
-		accAngleX += (atan(accYN / sqrt(pow(accXN, 2) + pow(accZN, 2))) * 180 / PI);
-		accAngleY += (atan(-1 * accXN / sqrt(pow(accYN, 2) + pow(accZN, 2))) * 180 / PI);
-		errAccAngleZ += accZN;
+		accXN_2 = accX_2 / 16384.0;
+		accYN_2 = accY_2 / 16384.0;
+		accZN_2 = accZ_2 / 16384.0;
 
-		errGyrX += (gyrX / 131.0);
-		errGyrY += (gyrY / 131.0);
-		errGyrZ += (gyrZ / 131.0);
+		//Calculate angles from accelerometer
+		errAccPitch_1 += (atan(accXN_1 / sqrt((accYN_1 * accYN_1) + (accZN_1 * accZN_1))) * 180 / PI);
+		errAccRoll_1  += (atan(accYN_1 / sqrt((accXN_1 * accXN_1) + (accZN_1 * accZN_1))) * 180 / PI);
+
+		errAccPitch_2 += (atan(accXN_2 / sqrt((accYN_2 * accYN_2) + (accZN_2 * accZN_2))) * 180 / PI);
+		errAccRoll_2  += (atan(accYN_2 / sqrt((accXN_2 * accXN_2) + (accZN_2 * accZN_2))) * 180 / PI);
+
+		errAccAngleZ_1 += accZN_1;
+		errAccAngleZ_2 += accZN_2;
+
+		errGyrX_1 += (gyrX_1 / 131.0);
+		errGyrY_1 += (gyrY_1 / 131.0);
+
+		errGyrX_2 += (gyrX_2 / 131.0);
+		errGyrY_2 += (gyrY_2 / 131.0);
 
 		counter++;
 	}
-	errAccAngleX = errAccAngleX / measures;
-	errAccAngleY = errAccAngleY / measures;
-	errAccAngleZ = errAccAngleZ / measures;
+	errAccPitch_1 = errAccPitch_1 / measures;
+	errAccRoll_1  = errAccRoll_1 / measures;
 
-	errGyrX = errGyrX / measures;
-	errGyrY = errGyrY / measures;
-	errGyrZ = errGyrZ / measures;
+	errAccPitch_2 = errAccPitch_2 / measures;
+	errAccRoll_2  = errAccRoll_2 / measures;
 
-	accAngleX = (atan(accY / sqrt(pow(accX, 2) + pow(accZ, 2))) * 180 / PI) - errAccAngleX;
-	accAngleY = (atan(-1 * accX / sqrt(pow(accY, 2) + pow(accZ, 2))) * 180 / PI) - errAccAngleY;
+	errAccAngleZ_1 = errAccAngleZ_1 / measures;
+	errAccAngleZ_2 = errAccAngleZ_2 / measures;
 
-	roll = accAngleX;
-	pitch = accAngleY;
-	lastRoll = roll;
-	lastPitch = pitch;
-	lastAccZ = accZN;
-	printf("Erro AccX: %.3f   AccY: %.3f   AccZ: %.3f\n", errAccAngleX, errAccAngleY, errAccAngleZ);
-	printf("Erro GyrX: %.3f   GyrY: %.3f   GyrZ: %.3f\n", errGyrX, errGyrY, errGyrZ);
+	errGyrX_1 = errGyrX_1 / measures;
+	errGyrY_1 = errGyrY_1 / measures;
+
+	errGyrX_2 = errGyrX_2 / measures;
+	errGyrY_2 = errGyrY_2 / measures;
+
+	roll_1 = (atan(accXN_1 / sqrt((accYN_1 * accYN_1) + (accZN_1 * accZN_1))) * 180 / PI) - errAccPitch_1;
+	pitch_1  = (atan(accYN_1 / sqrt((accXN_1 * accXN_1) + (accZN_1 * accZN_1))) * 180 / PI) - errAccRoll_1;
+
+	roll_2 = (atan(accXN_2 / sqrt((accYN_2 * accYN_2) + (accZN_2 * accZN_2))) * 180 / PI) - errAccPitch_2;
+	pitch_2  = (atan(accYN_2 / sqrt((accXN_2 * accXN_2) + (accZN_2 * accZN_2))) * 180 / PI) - errAccRoll_2;
+
+	lastPitch_1 = pitch_1;
+	lastRoll_1  = roll_1;
+
+	lastPitch_2 = pitch_2;
+	lastRoll_2  = roll_2;
+
+	lastAccZ_1 = accZN_1;
+	lastAccZ_2 = accZN_2;
+
+	printf("Erro IMU 1:\n");
+	printf("ACC: X: %.3f\tY: %.3f\tZ: %.3f\n", errAccPitch_1, errAccPitch_1, errAccAngleZ_1);
+	printf("GYR: X: %.3f\tY: %.3f\n", errGyrX_1, errGyrY_1);
+	printf("Erro IMU 2:\n");
+	printf("ACC: X: %.3f\tY: %.3f\tZ: %.3f\n", errAccPitch_2, errAccPitch_2, errAccAngleZ_2);
+	printf("GYR: X: %.3f\tY: %.3f\n", errGyrX_2, errGyrY_2);
 }
 
 int main()

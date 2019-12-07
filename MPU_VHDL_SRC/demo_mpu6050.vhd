@@ -18,10 +18,7 @@ entity DEMO_MPU6050 is
         RESET		: in	std_logic;
         SDA			: inout	std_logic;
         SCL			: inout	std_logic;
-        LEDX		: out	std_logic;
-        LEDY		: out	std_logic;
-        LEDZ		: out	std_logic;
-        LEDSIGN		: out	std_logic;
+        FILTER_ON   : in    std_logic;
         X_ACC	    : out   std_logic_vector(data_width - 1 downto 0);
         Y_ACC	    : out   std_logic_vector(data_width - 1 downto 0);
         Z_ACC	    : out   std_logic_vector(data_width - 1 downto 0);
@@ -81,22 +78,6 @@ architecture mixed of DEMO_MPU6050 is
         );
     end component;
 -- COMPONENTS --
-    component COMPARE
-        port(
-            MCLK		: in	std_logic;
-            nRST		: in	std_logic;
-            TIC			: in	std_logic;
-            COMPLETED	: in	std_logic;
-            RESCAN		: out	std_logic;
-            XREG		: in	std_logic_vector(7 downto 0);
-            YREG		: in	std_logic_vector(7 downto 0);
-            ZREG		: in	std_logic_vector(7 downto 0);
-            LEDX		: out	std_logic;
-            LEDY		: out	std_logic;
-            LEDZ		: out	std_logic;
-            SIGN		: out	std_logic
-        );
-    end component;
 
     component acc_filter is
         generic (
@@ -144,11 +125,11 @@ architecture mixed of DEMO_MPU6050 is
 
     type axis_array_data is array (2 downto 0) of std_logic_vector(data_width - 1 downto 0);
 
-    signal ACC_ARRAY_1 : axis_array_data;
-    signal GYR_ARRAY_1 : axis_array_data;
+    signal ACC_ARRAY : axis_array_data;
+    signal GYR_ARRAY : axis_array_data;
     
-    signal ACC_ARRAY_1_f : axis_array_data;
-    signal GYR_ARRAY_1_f : axis_array_data;
+    signal ACC_ARRAY_f : axis_array_data;
+    signal GYR_ARRAY_f : axis_array_data;
 --
 
 begin
@@ -203,24 +184,6 @@ begin
             SDA_OUT		=> SDA_OUT
         );
 
--- PORT MAP --
-    I_COMPARE_0 : COMPARE
-        port map (
-            MCLK		=> MCLK,
-            nRST		=> nRST,
-            TIC			=> TIC,
-            COMPLETED	=> COMPLETED,
-            RESCAN		=> RESCAN,
-            XREG		=> ACC_ARRAY_1_f(0)(15 downto 8),--XREG,
-            YREG		=> ACC_ARRAY_1_f(1)(15 downto 8),--YREG,
-            ZREG		=> ACC_ARRAY_1_f(2)(15 downto 8),--ZREG,
-            LEDX		=> LEDX,
-            LEDY		=> LEDY,
-            LEDZ		=> LEDZ,
-            SIGN		=> LEDSIGN
-        );
-
-
     ACC_FILTER_GEN: for I in 2 downto 0 generate
         filter_acc: acc_filter
             generic map(
@@ -233,8 +196,8 @@ begin
             port map(
                 clk => MCLK,
                 reset => RESET,
-                filter_in => ACC_ARRAY_1(I)(data_width - 1 downto 0),
-                filter_out => ACC_ARRAY_1_f(I)(data_width - 1 downto 0)
+                filter_in => ACC_ARRAY(I)(data_width - 1 downto 0),
+                filter_out => ACC_ARRAY_f(I)(data_width - 1 downto 0)
             );
     end generate ACC_FILTER_GEN;
 
@@ -250,8 +213,8 @@ begin
             port map(
                 clk => MCLK,
                 reset => RESET,
-                filter_in => GYR_ARRAY_1(I)(data_width - 1 downto 0),
-                filter_out => GYR_ARRAY_1_f(I)(data_width - 1 downto 0)
+                filter_in => GYR_ARRAY(I)(data_width - 1 downto 0),
+                filter_out => GYR_ARRAY_f(I)(data_width - 1 downto 0)
             );
     end generate GYR_FILTER_GEN;
 
@@ -274,38 +237,38 @@ begin
     REGS: process(MCLK, nRST)
     begin
         if (nRST = '0') then
-            ACC_ARRAY_1(0) <= (others=>'0');
-            ACC_ARRAY_1(1) <= (others=>'0');
-            ACC_ARRAY_1(2) <= (others=>'0');
-            GYR_ARRAY_1(0) <= (others=>'0');
-            GYR_ARRAY_1(1) <= (others=>'0');
-            GYR_ARRAY_1(2) <= (others=>'0');
+            ACC_ARRAY(0) <= (others=>'0');
+            ACC_ARRAY(1) <= (others=>'0');
+            ACC_ARRAY(2) <= (others=>'0');
+            GYR_ARRAY(0) <= (others=>'0');
+            GYR_ARRAY(1) <= (others=>'0');
+            GYR_ARRAY(2) <= (others=>'0');
         elsif (MCLK'event and MCLK = '1') then
             if (TIC = '1' and LOAD = '1') then
                 if (ADR = x"0") then
-                    ACC_ARRAY_1(0)(data_width - 1 downto 8) <= DATA;
+                    ACC_ARRAY(0)(data_width - 1 downto 8) <= DATA;
                 elsif (ADR = x"1") then
-                    ACC_ARRAY_1(0)(7 downto 0) <= DATA;
+                    ACC_ARRAY(0)(7 downto 0) <= DATA;
                 elsif (ADR = x"2") then
-                    ACC_ARRAY_1(1)(data_width - 1 downto 8) <= DATA;
+                    ACC_ARRAY(1)(data_width - 1 downto 8) <= DATA;
                 elsif (ADR = x"3") then
-                    ACC_ARRAY_1(1)(7 downto 0) <= DATA;
+                    ACC_ARRAY(1)(7 downto 0) <= DATA;
                 elsif (ADR = x"4") then
-                    ACC_ARRAY_1(2) (data_width - 1 downto 8) <= DATA;
+                    ACC_ARRAY(2) (data_width - 1 downto 8) <= DATA;
                 elsif (ADR = x"5") then
-                    ACC_ARRAY_1(2)(7 downto 0) <= DATA;
+                    ACC_ARRAY(2)(7 downto 0) <= DATA;
                 elsif (ADR = x"8") then
-                    GYR_ARRAY_1(0) (data_width - 1 downto 8) <= DATA;
+                    GYR_ARRAY(0) (data_width - 1 downto 8) <= DATA;
                 elsif (ADR = x"9") then
-                    GYR_ARRAY_1(0)(7 downto 0) <= DATA;
+                    GYR_ARRAY(0)(7 downto 0) <= DATA;
                 elsif (ADR = x"A") then
-                    GYR_ARRAY_1(1) (data_width - 1 downto 8) <= DATA;
+                    GYR_ARRAY(1) (data_width - 1 downto 8) <= DATA;
                 elsif (ADR = x"B") then
-                    GYR_ARRAY_1(1)(7 downto 0) <= DATA;
+                    GYR_ARRAY(1)(7 downto 0) <= DATA;
                 elsif (ADR = x"C") then
-                    GYR_ARRAY_1(2) (data_width - 1 downto 8) <= DATA;
+                    GYR_ARRAY(2) (data_width - 1 downto 8) <= DATA;
                 elsif (ADR = x"D") then
-                    GYR_ARRAY_1(2)(7 downto 0) <= DATA;
+                    GYR_ARRAY(2)(7 downto 0) <= DATA;
                 end if;
             end if;
         end if;
@@ -317,10 +280,21 @@ begin
     SDA <= 'Z' when SDA_OUT='1' else '0';
     SDA_IN <= to_UX01(SDA);
     --DATA UPDATE
-    X_ACC <= ACC_ARRAY_1_f(0)(data_width -1 downto 0);
-    Y_ACC <= ACC_ARRAY_1_f(1)(data_width -1 downto 0);
-    Z_ACC <= ACC_ARRAY_1_f(2)(data_width -1 downto 0);
-    X_GYR <= GYR_ARRAY_1_f(0)(data_width -1 downto 0);
-    Y_GYR <= GYR_ARRAY_1_f(1)(data_width -1 downto 0);
-    Z_GYR <= GYR_ARRAY_1_f(2)(data_width -1 downto 0);
+    X_ACC <= ACC_ARRAY_f(0)(data_width -1 downto 0) when FILTER_ON = '1'
+        else ACC_ARRAY(0)(data_width -1 downto 0);
+
+    Y_ACC <= ACC_ARRAY_f(1)(data_width -1 downto 0) when FILTER_ON = '1'
+        else ACC_ARRAY(1)(data_width -1 downto 0);
+
+    Z_ACC <= ACC_ARRAY_f(2)(data_width -1 downto 0) when FILTER_ON = '1'
+        else ACC_ARRAY(2)(data_width -1 downto 0);
+
+    X_GYR <= GYR_ARRAY_f(0)(data_width -1 downto 0) when FILTER_ON = '1'
+        else GYR_ARRAY(0)(data_width -1 downto 0);
+
+    Y_GYR <= GYR_ARRAY_f(1)(data_width -1 downto 0) when FILTER_ON = '1'
+        else GYR_ARRAY(1)(data_width -1 downto 0);
+
+    Z_GYR <= GYR_ARRAY_f(2)(data_width -1 downto 0) when FILTER_ON = '1'
+        else GYR_ARRAY(2)(data_width -1 downto 0);
 end mixed;
