@@ -13,3 +13,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports SDA_2]
 set_property IOSTANDARD LVCMOS33 [get_ports SCL_1]
 set_property IOSTANDARD LVCMOS33 [get_ports SCL_2]
 set_property IOSTANDARD LVCMOS33 [get_ports SDA_1]
+
+set_property PACKAGE_PIN F22 [get_ports FILTER_ON]
+set_property PACKAGE_PIN T22 [get_ports RUNNING]
+set_property IOSTANDARD LVCMOS33 [get_ports RUNNING]
+set_property IOSTANDARD LVCMOS18 [get_ports FILTER_ON]
