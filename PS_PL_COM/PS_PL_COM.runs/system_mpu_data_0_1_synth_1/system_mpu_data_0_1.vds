@@ -1,0 +1,576 @@
+#-----------------------------------------------------------
+# Vivado v2018.3 (64-bit)
+# SW Build 2405991 on Thu Dec  6 23:38:27 MST 2018
+# IP Build 2404404 on Fri Dec  7 01:43:56 MST 2018
+# Start of session at: Sun Jun 23 19:34:05 2019
+# Process ID: 7952
+# Current directory: D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.runs/system_mpu_data_0_1_synth_1
+# Command line: vivado.exe -log system_mpu_data_0_1.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source system_mpu_data_0_1.tcl
+# Log file: D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.runs/system_mpu_data_0_1_synth_1/system_mpu_data_0_1.vds
+# Journal file: D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.runs/system_mpu_data_0_1_synth_1\vivado.jou
+#-----------------------------------------------------------
+source system_mpu_data_0_1.tcl -notrace
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'd:/UTFPR/TCC/pothole_detector/ip_repo/mpu_data_1.0'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'F:/xilinx/Vivado/2018.3/data/ip'.
+Command: synth_design -top system_mpu_data_0_1 -part xc7z020clg484-1 -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: Launching helper process for spawning children vivado processes
+INFO: Helper process launched with PID 5376 
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 395.422 ; gain = 98.555
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'system_mpu_data_0_1' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_mpu_data_0_1/synth/system_mpu_data_0_1.vhd:193]
+	Parameter C_S00_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S00_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+	Parameter C_S01_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S01_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+	Parameter C_S05_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S05_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+	Parameter C_S02_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S02_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+	Parameter C_S04_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S04_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+	Parameter C_S03_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S03_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-3491] module 'mpu_data_v1_0' declared at 'd:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0.vhd:5' bound to instance 'U0' of component 'mpu_data_v1_0' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_mpu_data_0_1/synth/system_mpu_data_0_1.vhd:505]
+INFO: [Synth 8-638] synthesizing module 'mpu_data_v1_0' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0.vhd:191]
+	Parameter C_S00_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S00_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+	Parameter C_S01_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S01_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+	Parameter C_S02_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S02_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+	Parameter C_S03_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S03_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+	Parameter C_S04_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S04_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+	Parameter C_S05_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S05_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+	Parameter C_S_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-3491] module 'mpu_data_v1_0_S00_AXI' declared at 'd:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S00_AXI.vhd:5' bound to instance 'mpu_data_v1_0_S00_AXI_inst' of component 'mpu_data_v1_0_S00_AXI' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0.vhd:383]
+INFO: [Synth 8-638] synthesizing module 'mpu_data_v1_0_S00_AXI' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S00_AXI.vhd:89]
+	Parameter C_S_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-226] default block is never used [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S00_AXI.vhd:227]
+INFO: [Synth 8-226] default block is never used [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S00_AXI.vhd:357]
+WARNING: [Synth 8-614] signal 'S_AXI_DATA_IN' is read in the process but is not in the sensitivity list [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S00_AXI.vhd:352]
+WARNING: [Synth 8-6014] Unused sequential element slv_reg1_reg was removed.  [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S00_AXI.vhd:221]
+WARNING: [Synth 8-6014] Unused sequential element loc_addr_reg was removed.  [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S00_AXI.vhd:225]
+INFO: [Synth 8-256] done synthesizing module 'mpu_data_v1_0_S00_AXI' (1#1) [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S00_AXI.vhd:89]
+	Parameter C_S_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-3491] module 'mpu_data_v1_0_S01_AXI' declared at 'd:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S01_AXI.vhd:5' bound to instance 'mpu_data_v1_0_S01_AXI_inst' of component 'mpu_data_v1_0_S01_AXI' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0.vhd:414]
+INFO: [Synth 8-638] synthesizing module 'mpu_data_v1_0_S01_AXI' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S01_AXI.vhd:89]
+	Parameter C_S_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-226] default block is never used [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S01_AXI.vhd:227]
+INFO: [Synth 8-226] default block is never used [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S01_AXI.vhd:357]
+WARNING: [Synth 8-614] signal 'S_AXI_DATA_IN' is read in the process but is not in the sensitivity list [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S01_AXI.vhd:352]
+WARNING: [Synth 8-6014] Unused sequential element slv_reg1_reg was removed.  [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S01_AXI.vhd:221]
+WARNING: [Synth 8-6014] Unused sequential element loc_addr_reg was removed.  [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S01_AXI.vhd:225]
+INFO: [Synth 8-256] done synthesizing module 'mpu_data_v1_0_S01_AXI' (2#1) [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S01_AXI.vhd:89]
+	Parameter C_S_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-3491] module 'mpu_data_v1_0_S02_AXI' declared at 'd:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S02_AXI.vhd:5' bound to instance 'mpu_data_v1_0_S02_AXI_inst' of component 'mpu_data_v1_0_S02_AXI' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0.vhd:445]
+INFO: [Synth 8-638] synthesizing module 'mpu_data_v1_0_S02_AXI' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S02_AXI.vhd:89]
+	Parameter C_S_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-226] default block is never used [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S02_AXI.vhd:227]
+INFO: [Synth 8-226] default block is never used [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S02_AXI.vhd:357]
+WARNING: [Synth 8-614] signal 'S_AXI_DATA_IN' is read in the process but is not in the sensitivity list [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S02_AXI.vhd:352]
+WARNING: [Synth 8-6014] Unused sequential element slv_reg1_reg was removed.  [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S02_AXI.vhd:221]
+WARNING: [Synth 8-6014] Unused sequential element loc_addr_reg was removed.  [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S02_AXI.vhd:225]
+INFO: [Synth 8-256] done synthesizing module 'mpu_data_v1_0_S02_AXI' (3#1) [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S02_AXI.vhd:89]
+	Parameter C_S_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-3491] module 'mpu_data_v1_0_S03_AXI' declared at 'd:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S03_AXI.vhd:5' bound to instance 'mpu_data_v1_0_S03_AXI_inst' of component 'mpu_data_v1_0_S03_AXI' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0.vhd:477]
+INFO: [Synth 8-638] synthesizing module 'mpu_data_v1_0_S03_AXI' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S03_AXI.vhd:89]
+	Parameter C_S_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-226] default block is never used [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S03_AXI.vhd:227]
+INFO: [Synth 8-226] default block is never used [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S03_AXI.vhd:357]
+WARNING: [Synth 8-614] signal 'S_AXI_DATA_IN' is read in the process but is not in the sensitivity list [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S03_AXI.vhd:352]
+WARNING: [Synth 8-6014] Unused sequential element slv_reg1_reg was removed.  [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S03_AXI.vhd:221]
+WARNING: [Synth 8-6014] Unused sequential element loc_addr_reg was removed.  [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S03_AXI.vhd:225]
+INFO: [Synth 8-256] done synthesizing module 'mpu_data_v1_0_S03_AXI' (4#1) [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S03_AXI.vhd:89]
+	Parameter C_S_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-3491] module 'mpu_data_v1_0_S04_AXI' declared at 'd:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S04_AXI.vhd:5' bound to instance 'mpu_data_v1_0_S04_AXI_inst' of component 'mpu_data_v1_0_S04_AXI' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0.vhd:508]
+INFO: [Synth 8-638] synthesizing module 'mpu_data_v1_0_S04_AXI' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S04_AXI.vhd:89]
+	Parameter C_S_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-226] default block is never used [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S04_AXI.vhd:227]
+INFO: [Synth 8-226] default block is never used [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S04_AXI.vhd:357]
+WARNING: [Synth 8-614] signal 'S_AXI_DATA_IN' is read in the process but is not in the sensitivity list [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S04_AXI.vhd:352]
+WARNING: [Synth 8-6014] Unused sequential element slv_reg1_reg was removed.  [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S04_AXI.vhd:221]
+WARNING: [Synth 8-6014] Unused sequential element loc_addr_reg was removed.  [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S04_AXI.vhd:225]
+INFO: [Synth 8-256] done synthesizing module 'mpu_data_v1_0_S04_AXI' (5#1) [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S04_AXI.vhd:89]
+	Parameter C_S_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-3491] module 'mpu_data_v1_0_S05_AXI' declared at 'd:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S05_AXI.vhd:5' bound to instance 'mpu_data_v1_0_S05_AXI_inst' of component 'mpu_data_v1_0_S05_AXI' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0.vhd:539]
+INFO: [Synth 8-638] synthesizing module 'mpu_data_v1_0_S05_AXI' [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S05_AXI.vhd:89]
+	Parameter C_S_AXI_DATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S_AXI_ADDR_WIDTH bound to: 4 - type: integer 
+INFO: [Synth 8-226] default block is never used [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S05_AXI.vhd:227]
+INFO: [Synth 8-226] default block is never used [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S05_AXI.vhd:357]
+WARNING: [Synth 8-614] signal 'S_AXI_DATA_IN' is read in the process but is not in the sensitivity list [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S05_AXI.vhd:352]
+WARNING: [Synth 8-6014] Unused sequential element slv_reg1_reg was removed.  [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S05_AXI.vhd:221]
+WARNING: [Synth 8-6014] Unused sequential element loc_addr_reg was removed.  [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S05_AXI.vhd:225]
+INFO: [Synth 8-256] done synthesizing module 'mpu_data_v1_0_S05_AXI' (6#1) [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0_S05_AXI.vhd:89]
+INFO: [Synth 8-256] done synthesizing module 'mpu_data_v1_0' (7#1) [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ipshared/960c/hdl/mpu_data_v1_0.vhd:191]
+INFO: [Synth 8-256] done synthesizing module 'system_mpu_data_0_1' (8#1) [d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.srcs/sources_1/bd/system/ip/system_mpu_data_0_1/synth/system_mpu_data_0_1.vhd:193]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S05_AXI has unconnected port S_AXI_AWPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S05_AXI has unconnected port S_AXI_AWPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S05_AXI has unconnected port S_AXI_AWPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S05_AXI has unconnected port S_AXI_ARPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S05_AXI has unconnected port S_AXI_ARPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S05_AXI has unconnected port S_AXI_ARPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S04_AXI has unconnected port S_AXI_AWPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S04_AXI has unconnected port S_AXI_AWPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S04_AXI has unconnected port S_AXI_AWPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S04_AXI has unconnected port S_AXI_ARPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S04_AXI has unconnected port S_AXI_ARPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S04_AXI has unconnected port S_AXI_ARPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S03_AXI has unconnected port S_AXI_AWPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S03_AXI has unconnected port S_AXI_AWPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S03_AXI has unconnected port S_AXI_AWPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S03_AXI has unconnected port S_AXI_ARPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S03_AXI has unconnected port S_AXI_ARPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S03_AXI has unconnected port S_AXI_ARPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S02_AXI has unconnected port S_AXI_AWPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S02_AXI has unconnected port S_AXI_AWPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S02_AXI has unconnected port S_AXI_AWPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S02_AXI has unconnected port S_AXI_ARPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S02_AXI has unconnected port S_AXI_ARPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S02_AXI has unconnected port S_AXI_ARPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S01_AXI has unconnected port S_AXI_AWPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S01_AXI has unconnected port S_AXI_AWPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S01_AXI has unconnected port S_AXI_AWPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S01_AXI has unconnected port S_AXI_ARPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S01_AXI has unconnected port S_AXI_ARPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S01_AXI has unconnected port S_AXI_ARPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S00_AXI has unconnected port S_AXI_AWPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S00_AXI has unconnected port S_AXI_AWPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S00_AXI has unconnected port S_AXI_AWPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S00_AXI has unconnected port S_AXI_ARPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S00_AXI has unconnected port S_AXI_ARPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S00_AXI has unconnected port S_AXI_ARPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[31]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[30]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[29]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[28]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[27]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[26]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[25]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[24]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[23]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[22]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[21]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[20]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[19]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[18]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[17]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[16]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[15]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[14]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[13]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[12]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[11]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[10]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[9]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[8]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[7]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[6]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[5]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[4]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[3]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0 has unconnected port s04_axi_data_in[0]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:09 . Memory (MB): peak = 452.410 ; gain = 155.543
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:08 ; elapsed = 00:00:10 . Memory (MB): peak = 452.410 ; gain = 155.543
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:08 ; elapsed = 00:00:10 . Memory (MB): peak = 452.410 ; gain = 155.543
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7z020clg484-1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 803.523 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 803.523 ; gain = 0.000
+WARNING: [Constraints 18-5210] No constraints selected for write.
+Resolution: This message can indicate that there are no constraints for the design, or it can indicate that the used_in flags are set such that the constraints are ignored. This later case is used when running synth_design to not write synthesis constraints to the resulting checkpoint. Instead, project constraints are read when the synthesized design is opened.
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.338 . Memory (MB): peak = 806.605 ; gain = 3.082
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:23 ; elapsed = 00:00:27 . Memory (MB): peak = 806.605 ; gain = 509.738
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7z020clg484-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:23 ; elapsed = 00:00:27 . Memory (MB): peak = 806.605 ; gain = 509.738
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:27 . Memory (MB): peak = 806.605 ; gain = 509.738
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:24 ; elapsed = 00:00:29 . Memory (MB): peak = 806.605 ; gain = 509.738
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 24    
+	                4 Bit    Registers := 12    
+	                2 Bit    Registers := 12    
+	                1 Bit    Registers := 36    
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 18    
+	   4 Input     32 Bit        Muxes := 24    
+	   2 Input      1 Bit        Muxes := 30    
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Hierarchical Component Statistics 
+---------------------------------------------------------------------------------
+Hierarchical RTL Component report 
+Module mpu_data_v1_0_S00_AXI 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 4     
+	                4 Bit    Registers := 2     
+	                2 Bit    Registers := 2     
+	                1 Bit    Registers := 6     
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 3     
+	   4 Input     32 Bit        Muxes := 4     
+	   2 Input      1 Bit        Muxes := 5     
+Module mpu_data_v1_0_S01_AXI 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 4     
+	                4 Bit    Registers := 2     
+	                2 Bit    Registers := 2     
+	                1 Bit    Registers := 6     
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 3     
+	   4 Input     32 Bit        Muxes := 4     
+	   2 Input      1 Bit        Muxes := 5     
+Module mpu_data_v1_0_S02_AXI 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 4     
+	                4 Bit    Registers := 2     
+	                2 Bit    Registers := 2     
+	                1 Bit    Registers := 6     
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 3     
+	   4 Input     32 Bit        Muxes := 4     
+	   2 Input      1 Bit        Muxes := 5     
+Module mpu_data_v1_0_S03_AXI 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 4     
+	                4 Bit    Registers := 2     
+	                2 Bit    Registers := 2     
+	                1 Bit    Registers := 6     
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 3     
+	   4 Input     32 Bit        Muxes := 4     
+	   2 Input      1 Bit        Muxes := 5     
+Module mpu_data_v1_0_S04_AXI 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 4     
+	                4 Bit    Registers := 2     
+	                2 Bit    Registers := 2     
+	                1 Bit    Registers := 6     
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 3     
+	   4 Input     32 Bit        Muxes := 4     
+	   2 Input      1 Bit        Muxes := 5     
+Module mpu_data_v1_0_S05_AXI 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 4     
+	                4 Bit    Registers := 2     
+	                2 Bit    Registers := 2     
+	                1 Bit    Registers := 6     
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 3     
+	   4 Input     32 Bit        Muxes := 4     
+	   2 Input      1 Bit        Muxes := 5     
+---------------------------------------------------------------------------------
+Finished RTL Hierarchical Component Statistics
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 220 (col length:60)
+BRAMs: 280 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+Warning: Parallel synthesis criteria is not met 
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S05_AXI has unconnected port S_AXI_AWPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S05_AXI has unconnected port S_AXI_AWPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S05_AXI has unconnected port S_AXI_AWPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S05_AXI has unconnected port S_AXI_ARPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S05_AXI has unconnected port S_AXI_ARPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S05_AXI has unconnected port S_AXI_ARPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S04_AXI has unconnected port S_AXI_AWPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S04_AXI has unconnected port S_AXI_AWPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S04_AXI has unconnected port S_AXI_AWPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S04_AXI has unconnected port S_AXI_ARPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S04_AXI has unconnected port S_AXI_ARPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S04_AXI has unconnected port S_AXI_ARPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S03_AXI has unconnected port S_AXI_AWPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S03_AXI has unconnected port S_AXI_AWPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S03_AXI has unconnected port S_AXI_AWPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S03_AXI has unconnected port S_AXI_ARPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S03_AXI has unconnected port S_AXI_ARPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S03_AXI has unconnected port S_AXI_ARPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S02_AXI has unconnected port S_AXI_AWPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S02_AXI has unconnected port S_AXI_AWPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S02_AXI has unconnected port S_AXI_AWPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S02_AXI has unconnected port S_AXI_ARPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S02_AXI has unconnected port S_AXI_ARPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S02_AXI has unconnected port S_AXI_ARPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S01_AXI has unconnected port S_AXI_AWPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S01_AXI has unconnected port S_AXI_AWPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S01_AXI has unconnected port S_AXI_AWPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S01_AXI has unconnected port S_AXI_ARPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S01_AXI has unconnected port S_AXI_ARPROT[1]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S01_AXI has unconnected port S_AXI_ARPROT[0]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S00_AXI has unconnected port S_AXI_AWPROT[2]
+WARNING: [Synth 8-3331] design mpu_data_v1_0_S00_AXI has unconnected port S_AXI_AWPROT[1]
+INFO: [Common 17-14] Message 'Synth 8-3331' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+INFO: [Synth 8-3886] merging instance 'U0/mpu_data_v1_0_S03_AXI_inst/axi_rresp_reg[0]' (FDRE) to 'U0/mpu_data_v1_0_S03_AXI_inst/axi_rresp_reg[1]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\U0/mpu_data_v1_0_S03_AXI_inst/axi_rresp_reg[1] )
+INFO: [Synth 8-3886] merging instance 'U0/mpu_data_v1_0_S03_AXI_inst/axi_bresp_reg[0]' (FDRE) to 'U0/mpu_data_v1_0_S03_AXI_inst/axi_bresp_reg[1]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\U0/mpu_data_v1_0_S03_AXI_inst/axi_bresp_reg[1] )
+INFO: [Synth 8-3886] merging instance 'U0/mpu_data_v1_0_S04_AXI_inst/axi_rresp_reg[0]' (FDRE) to 'U0/mpu_data_v1_0_S04_AXI_inst/axi_rresp_reg[1]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\U0/mpu_data_v1_0_S04_AXI_inst/axi_rresp_reg[1] )
+INFO: [Synth 8-3886] merging instance 'U0/mpu_data_v1_0_S04_AXI_inst/axi_bresp_reg[0]' (FDRE) to 'U0/mpu_data_v1_0_S04_AXI_inst/axi_bresp_reg[1]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\U0/mpu_data_v1_0_S04_AXI_inst/axi_bresp_reg[1] )
+INFO: [Synth 8-3886] merging instance 'U0/mpu_data_v1_0_S02_AXI_inst/axi_rresp_reg[0]' (FDRE) to 'U0/mpu_data_v1_0_S02_AXI_inst/axi_rresp_reg[1]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\U0/mpu_data_v1_0_S02_AXI_inst/axi_rresp_reg[1] )
+INFO: [Synth 8-3886] merging instance 'U0/mpu_data_v1_0_S02_AXI_inst/axi_bresp_reg[0]' (FDRE) to 'U0/mpu_data_v1_0_S02_AXI_inst/axi_bresp_reg[1]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\U0/mpu_data_v1_0_S02_AXI_inst/axi_bresp_reg[1] )
+INFO: [Synth 8-3886] merging instance 'U0/mpu_data_v1_0_S05_AXI_inst/axi_rresp_reg[0]' (FDRE) to 'U0/mpu_data_v1_0_S05_AXI_inst/axi_rresp_reg[1]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\U0/mpu_data_v1_0_S05_AXI_inst/axi_rresp_reg[1] )
+INFO: [Synth 8-3886] merging instance 'U0/mpu_data_v1_0_S05_AXI_inst/axi_bresp_reg[0]' (FDRE) to 'U0/mpu_data_v1_0_S05_AXI_inst/axi_bresp_reg[1]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\U0/mpu_data_v1_0_S05_AXI_inst/axi_bresp_reg[1] )
+INFO: [Synth 8-3886] merging instance 'U0/mpu_data_v1_0_S01_AXI_inst/axi_rresp_reg[0]' (FDRE) to 'U0/mpu_data_v1_0_S01_AXI_inst/axi_rresp_reg[1]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\U0/mpu_data_v1_0_S01_AXI_inst/axi_rresp_reg[1] )
+INFO: [Synth 8-3886] merging instance 'U0/mpu_data_v1_0_S01_AXI_inst/axi_bresp_reg[0]' (FDRE) to 'U0/mpu_data_v1_0_S01_AXI_inst/axi_bresp_reg[1]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\U0/mpu_data_v1_0_S01_AXI_inst/axi_bresp_reg[1] )
+INFO: [Synth 8-3886] merging instance 'U0/mpu_data_v1_0_S00_AXI_inst/axi_rresp_reg[0]' (FDRE) to 'U0/mpu_data_v1_0_S00_AXI_inst/axi_rresp_reg[1]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\U0/mpu_data_v1_0_S00_AXI_inst/axi_rresp_reg[1] )
+INFO: [Synth 8-3886] merging instance 'U0/mpu_data_v1_0_S00_AXI_inst/axi_bresp_reg[0]' (FDRE) to 'U0/mpu_data_v1_0_S00_AXI_inst/axi_bresp_reg[1]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\U0/mpu_data_v1_0_S00_AXI_inst/axi_bresp_reg[1] )
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:27 ; elapsed = 00:00:32 . Memory (MB): peak = 806.605 ; gain = 509.738
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:42 ; elapsed = 00:00:49 . Memory (MB): peak = 806.605 ; gain = 509.738
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:42 ; elapsed = 00:00:49 . Memory (MB): peak = 806.605 ; gain = 509.738
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:43 ; elapsed = 00:00:49 . Memory (MB): peak = 821.961 ; gain = 525.094
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:45 ; elapsed = 00:00:52 . Memory (MB): peak = 821.961 ; gain = 525.094
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:45 ; elapsed = 00:00:52 . Memory (MB): peak = 821.961 ; gain = 525.094
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:45 ; elapsed = 00:00:52 . Memory (MB): peak = 821.961 ; gain = 525.094
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:45 ; elapsed = 00:00:52 . Memory (MB): peak = 821.961 ; gain = 525.094
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:45 ; elapsed = 00:00:52 . Memory (MB): peak = 821.961 ; gain = 525.094
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:45 ; elapsed = 00:00:52 . Memory (MB): peak = 821.961 ; gain = 525.094
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-----+------+
+|      |Cell |Count |
++------+-----+------+
+|1     |LUT1 |     6|
+|2     |LUT2 |     6|
+|3     |LUT3 |     6|
+|4     |LUT4 |   108|
+|5     |LUT6 |   216|
+|6     |FDRE |   810|
+|7     |FDSE |    18|
++------+-----+------+
+
+Report Instance Areas: 
++------+-------------------------------+----------------------+------+
+|      |Instance                       |Module                |Cells |
++------+-------------------------------+----------------------+------+
+|1     |top                            |                      |  1170|
+|2     |  U0                           |mpu_data_v1_0         |  1170|
+|3     |    mpu_data_v1_0_S00_AXI_inst |mpu_data_v1_0_S00_AXI |   195|
+|4     |    mpu_data_v1_0_S01_AXI_inst |mpu_data_v1_0_S01_AXI |   195|
+|5     |    mpu_data_v1_0_S02_AXI_inst |mpu_data_v1_0_S02_AXI |   195|
+|6     |    mpu_data_v1_0_S03_AXI_inst |mpu_data_v1_0_S03_AXI |   195|
+|7     |    mpu_data_v1_0_S04_AXI_inst |mpu_data_v1_0_S04_AXI |   195|
+|8     |    mpu_data_v1_0_S05_AXI_inst |mpu_data_v1_0_S05_AXI |   195|
++------+-------------------------------+----------------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:45 ; elapsed = 00:00:52 . Memory (MB): peak = 821.961 ; gain = 525.094
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 68 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:28 ; elapsed = 00:00:39 . Memory (MB): peak = 821.961 ; gain = 170.898
+Synthesis Optimization Complete : Time (s): cpu = 00:00:46 ; elapsed = 00:00:52 . Memory (MB): peak = 821.961 ; gain = 525.094
+INFO: [Project 1-571] Translating synthesized netlist
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 825.113 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Common 17-83] Releasing license: Synthesis
+72 Infos, 119 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:48 ; elapsed = 00:00:56 . Memory (MB): peak = 825.137 ; gain = 537.102
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 825.137 ; gain = 0.000
+WARNING: [Constraints 18-5210] No constraints selected for write.
+Resolution: This message can indicate that there are no constraints for the design, or it can indicate that the used_in flags are set such that the constraints are ignored. This later case is used when running synth_design to not write synthesis constraints to the resulting checkpoint. Instead, project constraints are read when the synthesized design is opened.
+INFO: [Common 17-1381] The checkpoint 'D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.runs/system_mpu_data_0_1_synth_1/system_mpu_data_0_1.dcp' has been generated.
+INFO: [Coretcl 2-1648] Added synthesis output to IP cache for IP system_mpu_data_0_1, cache-ID = 40e20ee3f7ab51b6
+INFO: [Coretcl 2-1174] Renamed 7 cell refs.
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 825.137 ; gain = 0.000
+WARNING: [Constraints 18-5210] No constraints selected for write.
+Resolution: This message can indicate that there are no constraints for the design, or it can indicate that the used_in flags are set such that the constraints are ignored. This later case is used when running synth_design to not write synthesis constraints to the resulting checkpoint. Instead, project constraints are read when the synthesized design is opened.
+INFO: [Common 17-1381] The checkpoint 'D:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.runs/system_mpu_data_0_1_synth_1/system_mpu_data_0_1.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file system_mpu_data_0_1_utilization_synth.rpt -pb system_mpu_data_0_1_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Sun Jun 23 19:35:14 2019...

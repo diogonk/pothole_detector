@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;mpu_read/src/timer_functions&apos; to &apos;timer_functions.c&apos;" description="Rename resource &apos;timer_functions&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/timer_functions" name="timer_functions.c" stamp="1567724255067" updateReferences="true"/>
+</session>
