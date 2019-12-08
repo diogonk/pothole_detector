@@ -35,6 +35,7 @@ set_property ip_output_repo d:/UTFPR/TCC/pothole_detector/PS_PL_COM/PS_PL_COM.ca
 set_property ip_cache_permissions {read write} [current_project]
 read_vhdl -library xil_defaultlib {
   D:/UTFPR/TCC/pothole_detector/MPU_VHDL_SRC/acc_filter.vhd
+  D:/UTFPR/TCC/pothole_detector/MPU_VHDL_SRC/compare.vhd
   D:/UTFPR/TCC/pothole_detector/MPU_VHDL_SRC/demo_mpu6050.vhd
   D:/UTFPR/TCC/pothole_detector/MPU_VHDL_SRC/i2cmaster.vhd
   D:/UTFPR/TCC/pothole_detector/MPU_VHDL_SRC/mpu6050.vhd
